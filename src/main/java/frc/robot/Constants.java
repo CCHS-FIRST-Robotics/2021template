@@ -13,21 +13,45 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    //==================
+    // HARDWARE PORTS
+    //==================
+    public static final int R_TALON_PORT = 6;
+    public static final int L_TALON_PORT  = 9;
 
-    public static final int rightTalonPort = 6;
-    public static final int leftTalonPort  = 9;
+    public static final int R_VICTOR_PORT = 1;
+    public static final int L_VICTOR_PORT  = 2;
 
-    public static final int rightVictorPort = 1;
-    public static final int leftVictorPort  = 2;
+    public static final int K_XBOX_PORT = 0;
 
-    public static final int kXboxPort = 0;
+    //==================
+    //STATE INITIALIZATION
+    //==================
+    public static final double[] INIT_POS = {0,0};
+    public static final double[] INIT_VEL = {0,0};
+    public static final double[] INIT_ACC = {0,0};
 
-    public static final float[] init_pos = {0,0};
-    public static final float[] init_vel = {0,0};
-    public static final float[] init_acc = {0,0};
+    public static final double INIT_HEADING = 0;
+    public static final double INIT_ANG_VEL = 0;
 
-    public static final float init_heading = 0;
+    public static final double INIT_L_WHL_VEL = 0;
+    public static final double INIT_R_WHL_VEL = 0;
 
-    public static final float init_ang_vel = 0;
+    public static final double INIT_L_WHL_TRAC = 0.9;
+    public static final double INIT_R_WHL_TRAC = 0.9;
 
+    public static final double INIT_FRICTION = 1.3;
+
+    public static final double INIT_MIX = 0.5;
+
+    public static final double INIT_DW = 0.4;
+
+    public static final double INIT_VARIANCE = 0.01;
+    //==================
+    //CERTAIN PHYSICAL CONSTANTS
+    //==================
+    public static final double ROBOT_WIDTH = 0.6;
+    public static final double WHEEL_RADIUS = 0.08;
+    
+    public static final double GRAV_ACC = -9.81;
 }
