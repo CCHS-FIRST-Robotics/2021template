@@ -21,4 +21,13 @@ public final class Constants {
     public static final int leftVictorPort  = 2;
 
     public static final int kXboxPort = 0;
+
+    public static final float[] init_pos = {0,0};
+    public static final float[] init_vel = {0,0};
+    public static final float[] init_acc = {0,0};
+
+    public static final float init_heading = 0;
+
+    public static final float init_ang_vel = 0;
+
 }
