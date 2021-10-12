@@ -1,5 +1,4 @@
 package frc.robot.state;
-import frc.robot.state.Kinematics;
 public class MainState {
     Kinematics Phy = new Kinematics();
 
@@ -7,7 +6,7 @@ public class MainState {
         this.Phy.predict(dt);
     }
 
-    public double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var){
+    public static double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var){
         double kalman_gain = current_var/(current_var + sensed_var);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
         double new_var = (1 - kalman_gain) * current_var;
