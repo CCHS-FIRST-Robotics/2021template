@@ -7,9 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.CommandHandler;
+import frc.robot.commands.Command;
+import frc.robot.state.MainState;
+import frc.robot.commands.CommandHelper;
 
 import static frc.robot.Constants.*;
 
@@ -20,41 +21,26 @@ import static frc.robot.Constants.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
-  XboxController xbox = new XboxController(kXboxPort);
-
-  // The robot's subsystems and commands are defined here...
-  private final Drive drive = new Drive();
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
-    drive.setDefaultCommand(
-      new RunCommand(
-      () -> drive.curvatureDrive(
-        -xbox.getY(Hand.kLeft),
-        xbox.getX(Hand.kRight)
-      ),
-      drive)
-    );
+  public MainState main_state = new MainState();
+  //public SomeSensor some_sensor = new SomeSensor();
+  //public AI 
+  public CommandHandler command_handler = new CommandHandler();
+  public Command main_command = new Command(0,0);
+  public RobotContainer(){
+    this.main_state = new MainState();
+    //Init somesensor and AI objects
+    this.command_handler = new CommandHandler();
+    this.main_command = new Command(0,0);
   }
-
-  /**F
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return null;
+  public void init(){
+    
+  }
+  public void mainLoop(){
+    //if this.some_sensor.canUse()
+    //this.some_sensor.updateState(this.main_state)
+    //this.main_command = this.AI.getCommand(this.main_state)
+    CommandHelper.updateState(this.main_state, this.main_command);
+    this.command_handler.scheduleCommands(this.main_command);
+    this.main_state.predict(Constants.MAIN_DT);
   }
 }
