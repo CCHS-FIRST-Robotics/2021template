@@ -24,7 +24,7 @@ public class MainState {
     public double getPosVar(){
         return this.Phy.Var.pos;
     }
-    public void setPosVar(double[] val, double var){
+    public void setPos(double[] val, double var){
         this.Phy.Val.pos = val;
         this.Phy.Var.pos = var;
     }
@@ -36,7 +36,7 @@ public class MainState {
     public double getVelVar(){
         return this.Phy.Var.vel;
     }
-    public void setVelVar(double[] val, double var){
+    public void setVel(double[] val, double var){
         this.Phy.Val.vel = val;
         this.Phy.Var.vel = var;
     }
@@ -48,7 +48,7 @@ public class MainState {
     public double getAccVar(){
         return this.Phy.Var.acc;
     }
-    public void setAccVar(double[] val, double var){
+    public void setAcc(double[] val, double var){
         this.Phy.Val.acc = val;
         this.Phy.Var.acc = var;
     }
@@ -60,7 +60,7 @@ public class MainState {
     public double getHeadingVar(){
         return this.Phy.Var.heading;
     }
-    public void setHeadingVar(double val, double var){
+    public void setHeading(double val, double var){
         this.Phy.Val.heading = val;
         this.Phy.Var.heading = var;
     }
@@ -72,7 +72,7 @@ public class MainState {
     public double getAngVelVar(){
         return this.Phy.Var.ang_vel;
     }
-    public void setAngVelVar(double val, double var){
+    public void setAngVel(double val, double var){
         this.Phy.Val.ang_vel = val;
         this.Phy.Var.ang_vel = var;
     }
@@ -84,7 +84,7 @@ public class MainState {
     public double getLWheelVelVar(){
         return this.Phy.Var.l_whl_vel;
     }
-    public void setLWheelVelVar(double val, double var){
+    public void setLWheelVel(double val, double var){
         this.Phy.Val.l_whl_vel = val;
         this.Phy.Var.l_whl_vel = var;
     }
@@ -96,7 +96,7 @@ public class MainState {
     public double getRWheelVelVar(){
         return this.Phy.Var.r_whl_vel;
     }
-    public void setRWheelVelVar(double val, double var){
+    public void setRWheelVel(double val, double var){
         this.Phy.Val.r_whl_vel = val;
         this.Phy.Var.r_whl_vel = var;
     }

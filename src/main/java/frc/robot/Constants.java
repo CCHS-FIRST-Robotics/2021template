@@ -48,10 +48,30 @@ public final class Constants {
 
     public static final double INIT_VARIANCE = 0.01;
     //==================
+    //VARIANCE LINEAR APPROX
+    //==================
+    public static final double ANG_VEL_VARIANCE = 0.5;
+    public static final double ACC_VARIANCE = 0.1;
+
+    //==================
+    //TIME CONSTANTS
+    //==================
+    public static final double MAIN_DT = 0.02;
+
+    //==================
+    //MOTOR CONSTANTS
+    //==================
+    public static final double MOTOR_MAX_POWER = 10; //OUTPUT IN WATTS
+    
+    public static final double MOTOR_PROP_VAR = 0.1;
+
+    //==================
     //CERTAIN PHYSICAL CONSTANTS
     //==================
     public static final double ROBOT_WIDTH = 0.6;
     public static final double WHEEL_RADIUS = 0.08;
+    public static final double ROBOT_MASS = 30;
     
     public static final double GRAV_ACC = -9.81;
+    
 }
