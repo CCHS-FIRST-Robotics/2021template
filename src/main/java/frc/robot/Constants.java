@@ -65,6 +65,8 @@ public final class Constants {
     
     public static final double MOTOR_PROP_VAR = 0.1;
 
+    public static final int TIMEOUT_MS = 50;
+
     //==================
     //CERTAIN PHYSICAL CONSTANTS
     //==================
