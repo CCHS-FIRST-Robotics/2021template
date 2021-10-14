@@ -62,11 +62,11 @@ public final class Constants {
     //==================
     //MOTOR CONSTANTS
     //==================
-    public static final double MOTOR_MAX_POWER = 100; //OUTPUT IN WATTS
+    public static final double MOTOR_MAX_POWER = 674; //OUTPUT IN WATTS
 
-    public static final double MOTOR_MAX_TORQUE = 100;
+    public static final double MOTOR_MAX_TORQUE = 4.82;
 
-    public static final double MOTOR_MAX_RPM = 200;
+    public static final double MOTOR_MAX_RPM = 666;
     
     public static final double MOTOR_PROP_VAR = 0.1;
 
@@ -75,9 +75,9 @@ public final class Constants {
     //==================
     //CERTAIN PHYSICAL CONSTANTS
     //==================
-    public static final double ROBOT_WIDTH = 0.6;
-    public static final double WHEEL_RADIUS = 0.08;
-    public static final double ROBOT_MASS = 30;
+    public static final double ROBOT_WIDTH = 0.635;
+    public static final double WHEEL_RADIUS = 0.09;
+    public static final double ROBOT_MASS = 40;
     
     public static final double GRAV_ACC = -9.81;
     
