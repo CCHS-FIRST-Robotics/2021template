@@ -62,7 +62,9 @@ public final class Constants {
     //==================
     //MOTOR CONSTANTS
     //==================
-    public static final double MOTOR_MAX_POWER = 10; //OUTPUT IN WATTS
+    public static final double MOTOR_MAX_POWER = 100; //OUTPUT IN WATTS
+
+    public static final double MOTOR_MAX_TORQUE = 100;
 
     public static final double MOTOR_MAX_RPM = 200;
     

@@ -99,6 +99,7 @@ public class Kinematics {
                 + (1 - delta_weight) * (this.vel[1] - temp_vel[1])/dt;
             //HEADING
             this.heading = this.heading + mix * (this.ang_vel * dt + 0.5*this.ang_acc*dt*dt) + (1 - mix) * arc_angle;
+            this.heading = this.heading % (2*Math.PI);
             //ANG VEL
             this.ang_vel = this.ang_vel + this.ang_acc*dt;
         }

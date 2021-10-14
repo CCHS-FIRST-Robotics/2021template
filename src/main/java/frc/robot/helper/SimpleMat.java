@@ -15,4 +15,8 @@ public class SimpleMat {
         double[] unit = {vec[0]/mag, vec[1]/mag};
         return unit;
     }
+    public static double[] projectHeading(double heading, double scalar){
+        double[] projected = {-1*Math.sin(heading)*scalar, Math.cos(heading)*scalar};
+        return projected;
+    }
 }

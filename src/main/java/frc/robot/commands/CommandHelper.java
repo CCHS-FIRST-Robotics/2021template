@@ -18,15 +18,21 @@ public class CommandHelper {
         state.setLWheelVel(left_rpm, left_var);
         state.setRWheelVel(right_rpm, right_var);
         //Accel + Ang Vel
-        double left_a = motorPowerAcceleration(Constants.MOTOR_MAX_POWER*command.left_pwr_prop);
-        double right_a = motorPowerAcceleration(Constants.MOTOR_MAX_POWER*command.right_pwr_prop);
-        double ang_vel = Constants.MAIN_DT*(right_a - left_a)/Constants.ROBOT_WIDTH;
-        double ang = Constants.MAIN_DT*0.5*ang_vel;
-        double[] local_a = {-0.5*Math.sin(ang)*(left_a + right_a),0.5*Math.cos(ang)*(left_a + right_a)};
-        double[] global_a = SimpleMat.rot2d(local_a, state.getHeadingVal());
+        double m_o_i = Constants.ROBOT_WIDTH*Constants.ROBOT_WIDTH*Constants.ROBOT_MASS*0.125;
+
+        double left_f = command.left_pwr_prop*Constants.MOTOR_MAX_TORQUE/Constants.WHEEL_RADIUS;
+        double right_f = command.right_pwr_prop*Constants.MOTOR_MAX_TORQUE/Constants.WHEEL_RADIUS;
+
+        double torque = (right_f - left_f)*Constants.ROBOT_WIDTH*0.5;
+        double forward_f = (right_f + left_f);
+
+        double ang_acc = torque/m_o_i;
+
+        double[] acc = SimpleMat.projectHeading(state.getHeadingVal(), forward_f/Constants.ROBOT_MASS);
+
         double ave_prop_coeff = (Math.abs(command.left_pwr_prop) + Math.abs(command.right_pwr_prop))*0.5;
-        state.setAngVel(ang,Constants.ANG_VEL_VARIANCE*ave_prop_coeff);
-        state.setAcc(global_a,Constants.ACC_VARIANCE*ave_prop_coeff);
+        state.setAngAcc(ang_acc,Constants.ANG_VEL_VARIANCE*ave_prop_coeff);
+        state.setAcc(acc,Constants.ACC_VARIANCE*ave_prop_coeff);
     }
     static double motorController(double target_rpm, double current_rpm){
         double vtnew = target_rpm*Constants.WHEEL_RADIUS*Constants.INIT_R_WHL_TRAC;

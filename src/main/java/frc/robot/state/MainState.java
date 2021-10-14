@@ -77,6 +77,19 @@ public class MainState {
         this.Phy.Var.ang_vel = var;
     }
 
+    //ang_acc
+    public double getAngAccVal(){
+        return this.Phy.Val.ang_acc;
+    }
+    public double getAngAccVar(){
+        return this.Phy.Var.ang_acc;
+    }
+    public void setAngAcc(double val, double var){
+        this.Phy.Val.ang_acc = val;
+        this.Phy.Var.ang_acc = var;
+    }
+
+
     //Left wheel ang vel
     public double getLWheelVelVal(){
         return this.Phy.Val.l_whl_vel;
