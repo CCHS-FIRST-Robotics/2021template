@@ -22,7 +22,7 @@ public final class Constants {
     public static final int R_VICTOR_PORT = 1;
     public static final int L_VICTOR_PORT  = 2;
 
-    public static final int K_XBOX_PORT = 0;
+    public static final int XBOX_PORT = 0;
 
     //==================
     //STATE INITIALIZATION
@@ -62,6 +62,8 @@ public final class Constants {
     //MOTOR CONSTANTS
     //==================
     public static final double MOTOR_MAX_POWER = 10; //OUTPUT IN WATTS
+
+    public static final double MOTOR_MAX_RPM = 200;
     
     public static final double MOTOR_PROP_VAR = 0.1;
 

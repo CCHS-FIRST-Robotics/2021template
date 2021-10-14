@@ -6,7 +6,7 @@ public class MainState {
         this.Phy.predict(dt);
     }
 
-    public static double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var){
+    public double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var){
         double kalman_gain = current_var/(current_var + sensed_var);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
         double new_var = (1 - kalman_gain) * current_var;
