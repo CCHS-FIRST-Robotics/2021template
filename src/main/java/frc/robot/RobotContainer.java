@@ -48,6 +48,14 @@ public class RobotContainer {
     CommandHelper.updateState(this.main_state, this.main_command);
     this.command_handler.scheduleCommands(this.main_command);
     this.main_state.predict(Constants.MAIN_DT);
+
+    //Logging
+    System.out.println("Left Power Proportion: " + String.valueOf(this.main_command.left_pwr_prop));
+    System.out.println("Right Power Proportion: " + String.valueOf(this.main_command.right_pwr_prop));
+    System.out.println("Predicted Heading: " + String.valueOf(this.main_state.getHeadingVal()));
+    System.out.println("Predicted Position: (" + String.valueOf(this.main_state.getPosVal()[0]) + ", "
+    + String.valueOf(this.main_state.getPosVal()[1]) + ")");
+    System.out.println("===========================");
   }
   public void setControllerState(){
     this.ai.setControllerState();
@@ -55,4 +63,5 @@ public class RobotContainer {
   public void setAutonomousState(){
     this.ai.setAutonomousState();
   }
+  
 }

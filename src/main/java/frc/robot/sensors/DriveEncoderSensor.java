@@ -46,5 +46,9 @@ public class DriveEncoderSensor extends BaseSensor{
             double[] r_new = state.kalmanUpdate(r_pred_radss, r_pred_var, r_radss, VARIANCE);
             state.setRWheelVel(r_new[0], r_new[1]);
         }
+
+        //Logging
+        System.out.println("Left Encoder Velocity: " + String.valueOf(l_radss));
+        System.out.println("Right Encoder Velocity: " + String.valueOf(r_radss));
     }
 }

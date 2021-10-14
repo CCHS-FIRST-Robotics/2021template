@@ -20,9 +20,13 @@ public class Controller {
     public Command getCommands(MainState state){
         double x_prop = xbox.getX(Hand.kLeft);
         double y_prop = xbox.getY(Hand.kLeft);
-        double l_rpm = Math.min(1,Math.max(-1,y_prop + x_prop))*Constants.MOTOR_MAX_RPM;
-        double r_rpm = Math.min(1,Math.max(-1,y_prop - x_prop))*Constants.MOTOR_MAX_RPM;
-        Command command = CommandHelper.computeCommand(state, l_rpm, r_rpm);
+        double l_avel = Math.min(1,Math.max(-1,y_prop + x_prop))*Constants.MOTOR_MAX_RPM*2*Math.PI/60;
+        double r_avel = Math.min(1,Math.max(-1,y_prop - x_prop))*Constants.MOTOR_MAX_RPM*2*Math.PI/60;
+        Command command = CommandHelper.computeCommand(state, l_avel, r_avel);
+
+        //Logging
+        System.out.println("Left desired angular velocity: " + String.valueOf(l_avel));
+        System.out.println("Right desired angular velocity: " + String.valueOf(r_avel));
         return command;
     }
 }
