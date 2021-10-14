@@ -18,12 +18,12 @@ public class DriveEncoderSensor extends BaseSensor{
     }
     public boolean commonSense(double rpm){
         if (rpm>300){
-            return true;
+            return false;
         }
         if (rpm<-300){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     public void processValue(MainState state){
         double l_raw = HardwareObjects.LEFT_MOTOR.getSelectedSensorVelocity(1);
@@ -38,10 +38,13 @@ public class DriveEncoderSensor extends BaseSensor{
         double l_pred_var = state.getLWheelVelVar();
         double r_pred_var = state.getRWheelVelVar();
 
-        double[] l_new = state.kalmanUpdate(l_pred_radss, l_pred_var, l_radss, VARIANCE);
-        double[] r_new = state.kalmanUpdate(r_pred_radss, r_pred_var, r_radss, VARIANCE);
-
-        state.setLWheelVel(l_new[0], l_new[1]);
-        state.setRWheelVel(r_new[0], r_new[1]);
+        if (commonSense(l_radss)){
+            double[] l_new = state.kalmanUpdate(l_pred_radss, l_pred_var, l_radss, VARIANCE);
+            state.setLWheelVel(l_new[0], l_new[1]);
+        }
+        if (commonSense(r_radss)){
+            double[] r_new = state.kalmanUpdate(r_pred_radss, r_pred_var, r_radss, VARIANCE);
+            state.setRWheelVel(r_new[0], r_new[1]);
+        }
     }
 }

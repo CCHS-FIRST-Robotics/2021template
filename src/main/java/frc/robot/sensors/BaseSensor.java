@@ -11,6 +11,5 @@ public abstract class BaseSensor{
 
     MainState internal_state;
     public abstract boolean shouldUse();
-    public abstract boolean commonSense();
     public abstract void processValue(MainState state);
 }

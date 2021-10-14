@@ -3,15 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
+import java.util.Date;
+import java.util.Calendar;
 import frc.robot.commands.CommandHandler;
 import frc.robot.ai.AI;
 import frc.robot.commands.Command;
 import frc.robot.state.MainState;
 import frc.robot.commands.CommandHelper;
+import frc.robot.sensors.DriveEncoderSensor;
 
 import static frc.robot.Constants.*;
 
@@ -24,6 +23,9 @@ import static frc.robot.Constants.*;
 public class RobotContainer {
   public MainState main_state = new MainState();
   //public SomeSensor some_sensor = new SomeSensor();
+  public Calendar main_timer = Calendar.getInstance();
+  double SYNC_TIME = 0;
+  public DriveEncoderSensor drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
   public AI ai = new AI();
   public CommandHandler command_handler = new CommandHandler();
   public Command main_command = new Command(0,0);
@@ -32,14 +34,16 @@ public class RobotContainer {
     this.ai = new AI();
     this.command_handler = new CommandHandler();
     this.main_command = new Command(0,0);
+    SYNC_TIME = (double) main_timer.getTimeInMillis()/1000;
+    this.drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
   }
   public void init(){
     
   }
   public void mainLoop(){
-    //if this.some_sensor.canUse()
-    //this.some_sensor.updateState(this.main_state)
-    //this.main_command = this.AI.getCommand(this.main_state)
+    if (this.drive_encoder_sensor.shouldUse()){
+      this.drive_encoder_sensor.processValue(main_state);
+    }
     this.main_command = this.ai.getCommand(this.main_state);
     CommandHelper.updateState(this.main_state, this.main_command);
     this.command_handler.scheduleCommands(this.main_command);
