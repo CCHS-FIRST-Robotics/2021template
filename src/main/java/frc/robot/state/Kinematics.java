@@ -74,7 +74,6 @@ public class Kinematics {
             double[] o_delta = SimpleMat.rot2d(o_local_delta, this.heading);
 
             double[] temp_vel = {this.vel[0], this.vel[1]};
-            double temp_heading = this.heading;
             //FRICTION ACCEL
             double[] vel_unit = SimpleMat.unitVec(this.vel);
             double[] friction_a = {friction * Constants.GRAV_ACC * vel_unit[0], friction * Constants.GRAV_ACC * vel_unit[1]};
@@ -98,10 +97,27 @@ public class Kinematics {
             this.acc[1] = delta_weight * this.acc[1] 
                 + (1 - delta_weight) * (this.vel[1] - temp_vel[1])/dt;
             //HEADING
-            this.heading = this.heading + mix * (this.ang_vel * dt + 0.5*this.ang_acc*dt*dt) + (1 - mix) * arc_angle;
+            double m_o_i = Constants.ROBOT_WIDTH*Constants.ROBOT_WIDTH*Constants.ROBOT_MASS*0.125;
+            double ang_fric = (this.ang_acc/Math.abs(this.ang_acc))*Constants.ROBOT_WIDTH*Constants.GRAV_ACC*friction/(2*m_o_i);
+            
+
+            this.heading = this.heading +
+             mix * (this.ang_vel * dt + 0.5*(this.ang_acc + ang_fric)*dt*dt) + 
+             (1 - mix) * arc_angle;
             this.heading = this.heading % (2*Math.PI);
             //ANG VEL
-            this.ang_vel = this.ang_vel + this.ang_acc*dt;
+            if (Math.abs(this.ang_acc)<Math.abs(ang_fric)){
+                if (Math.abs(this.ang_acc + ang_fric)*dt > Math.abs(this.ang_vel)){
+                    this.ang_vel = 0;
+                }
+                else{
+                    this.ang_vel = this.ang_vel + (this.ang_acc + ang_fric)*dt;
+                }
+            }
+            else{
+                this.ang_vel = this.ang_vel + (this.ang_acc + ang_fric)*dt;
+            }
+            
         }
     }
     class Variances {
