@@ -33,6 +33,7 @@ public final class Constants {
 
     public static final double INIT_HEADING = 0;
     public static final double INIT_ANG_VEL = 0;
+    public static final double INIT_ANG_ACC = 0;
 
     public static final double INIT_L_WHL_VEL = 0;
     public static final double INIT_R_WHL_VEL = 0;
