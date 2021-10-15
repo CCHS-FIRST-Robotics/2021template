@@ -19,11 +19,11 @@ public class DriveEncoderSensor extends BaseSensor {
         return true;
     }
 
-    public boolean commonSense(double rpm) {
-        if (rpm > 300) {
+    public boolean commonSense(double radss) {
+        if (radss > 100) {
             return false;
         }
-        if (rpm < -300) {
+        if (radss < -100) {
             return false;
         }
         return true;
