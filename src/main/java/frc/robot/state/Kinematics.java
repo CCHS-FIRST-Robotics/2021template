@@ -142,8 +142,7 @@ public class Kinematics {
             double arc_angle = dt * (r - l) / Constants.ROBOT_WIDTH;
             this.pos = this.pos + mix * (this.vel * dt + 0.5 * this.acc * dt * dt) + (1 - mix) * (l + r);
             this.vel = this.vel + this.acc * dt;
-            this.heading = this.heading + mix * (this.ang_vel * dt + 0.5 * this.ang_acc * dt * dt)
-                    + (1 - mix) * arc_angle;
+            this.heading = this.heading + (this.ang_vel * dt + 0.5 * this.ang_acc * dt * dt);
             this.ang_vel = this.ang_vel + this.ang_acc * dt;
         }
     }
