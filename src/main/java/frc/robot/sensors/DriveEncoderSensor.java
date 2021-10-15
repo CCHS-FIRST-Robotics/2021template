@@ -33,8 +33,8 @@ public class DriveEncoderSensor extends BaseSensor {
         double l_raw = HardwareObjects.LEFT_MOTOR.getSelectedSensorVelocity(1);
         double r_raw = HardwareObjects.RIGHT_MOTOR.getSelectedSensorVelocity(1);
         // Convert to rads per sec
-        double l_radss = l_raw * 2 * Math.PI / 60;
-        double r_radss = r_raw * 2 * Math.PI / 60;
+        double l_radss = l_raw * 2 * Math.PI * -1 / 60;
+        double r_radss = r_raw * 2 * Math.PI * -1 / 60;
 
         double l_pred_radss = state.getLWheelVelVal();
         double r_pred_radss = state.getRWheelVelVal();
