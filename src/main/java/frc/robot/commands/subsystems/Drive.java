@@ -6,14 +6,13 @@ import frc.robot.HardwareObjects;
 import frc.robot.Constants;
 
 public class Drive {
+
     public Drive() {
-        HardwareObjects.LEFT_MOTOR.configFactoryDefault();
-        HardwareObjects.RIGHT_MOTOR.configFactoryDefault();
 
     }
 
-    public void setDrives(double left_prop, double right_prop) {
-        HardwareObjects.LEFT_MOTOR.set(ControlMode.PercentOutput, left_prop);
-        HardwareObjects.RIGHT_MOTOR.set(ControlMode.PercentOutput, right_prop * -1);
+    public void setDrives(double left_prop, double right_prop, HardwareObjects hardware) {
+        hardware.LEFT_MOTOR.set(ControlMode.PercentOutput, left_prop);
+        hardware.RIGHT_MOTOR.set(ControlMode.PercentOutput, right_prop * -1);
     }
 }

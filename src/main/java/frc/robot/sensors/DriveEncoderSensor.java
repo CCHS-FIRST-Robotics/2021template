@@ -5,6 +5,7 @@ import frc.robot.state.MainState;
 import frc.robot.HardwareObjects;
 import com.ctre.phoenix.motorcontrol.can.*;
 import java.lang.Math;
+import frc.robot.HardwareObjects;
 
 public class DriveEncoderSensor extends BaseSensor {
     double VARIANCE = 0.01;
@@ -29,9 +30,9 @@ public class DriveEncoderSensor extends BaseSensor {
         return true;
     }
 
-    public void processValue(MainState state) {
-        double l_raw = HardwareObjects.LEFT_MOTOR.getSelectedSensorVelocity(1);
-        double r_raw = HardwareObjects.RIGHT_MOTOR.getSelectedSensorVelocity(1);
+    public void processValue(MainState state, HardwareObjects hardware) {
+        double l_raw = hardware.LEFT_MOTOR.getSelectedSensorVelocity(1);
+        double r_raw = hardware.RIGHT_MOTOR.getSelectedSensorVelocity(1);
         // Convert to rads per sec
         double l_radss = l_raw * 2 * Math.PI * -1 / 60;
         double r_radss = r_raw * 2 * Math.PI / 60;
