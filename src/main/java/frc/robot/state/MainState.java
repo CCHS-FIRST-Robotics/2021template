@@ -1,5 +1,7 @@
 package frc.robot.state;
 
+import java.lang.*;
+
 public class MainState {
     Kinematics Phy = new Kinematics();
 
@@ -11,8 +13,13 @@ public class MainState {
         double kalman_gain = current_var / (current_var + sensed_var);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
         double new_var = (1 - kalman_gain) * current_var;
-        double[] new_1 = { new_val, new_var };
-        return new_1;
+        if (Double.isNaN(new_val) || Double.isNaN(new_var)) {
+            double[] new_1 = { current_val, current_var };
+            return new_1;
+        } else {
+            double[] new_1 = { new_val, new_var };
+            return new_1;
+        }
     }
     // ================
     // GET SET VALUES
