@@ -12,6 +12,7 @@ import frc.robot.commands.Command;
 import frc.robot.state.MainState;
 import frc.robot.commands.CommandHelper;
 import frc.robot.sensors.DriveEncoderSensor;
+import frc.robot.sensors.IMUSensor;
 import frc.robot.HardwareObjects;
 
 import static frc.robot.Constants.*;
@@ -29,6 +30,7 @@ public class RobotContainer {
   public Calendar main_timer = Calendar.getInstance();
   double SYNC_TIME = 0;
   public DriveEncoderSensor drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
+  public IMUSensor imu_sensor = new IMUSensor(SYNC_TIME);
   public AI ai = new AI();
   public CommandHandler command_handler = new CommandHandler();
   public Command main_command = new Command(0, 0);
@@ -41,6 +43,7 @@ public class RobotContainer {
     this.main_command = new Command(0, 0);
     SYNC_TIME = (double) main_timer.getTimeInMillis() / 1000;
     this.drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
+    this.imu_sensor = new IMUSensor(SYNC_TIME);
     this.hardware = new HardwareObjects();
   }
 
@@ -51,6 +54,9 @@ public class RobotContainer {
   public void mainLoop() {
     if (this.drive_encoder_sensor.shouldUse()) {
       this.drive_encoder_sensor.processValue(this.main_state, this.hardware);
+    }
+    if (this.imu_sensor.shouldUse(this.hardware)) {
+      this.imu_sensor.processValue(this.main_state, this.hardware);
     }
     this.main_command = this.ai.getCommand(this.main_state);
     CommandHelper.updateState(this.main_state, this.main_command);

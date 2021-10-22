@@ -12,5 +12,4 @@ public abstract class BaseSensor {
 
     MainState internal_state;
 
-    public abstract boolean shouldUse();
 }
