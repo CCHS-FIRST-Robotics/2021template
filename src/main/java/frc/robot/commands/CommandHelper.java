@@ -6,24 +6,25 @@ import java.lang.Math;
 import frc.robot.helper.SimpleMat;
 
 public class CommandHelper {
-    public static Command computeCommand(MainState state, double left_target_rpm, double right_target_rpm) {
-        double left_prop = motorController(left_target_rpm, state.getLWheelVelVal());
-        double right_prop = motorController(right_target_rpm, state.getRWheelVelVal());
+    public static Command computeCommand(double left_target_rpm, double right_target_rpm) {
+        double left_prop = left_target_rpm / (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60);
+        if (left_prop > 1) {
+            left_prop = 1;
+        }
+        if (left_prop < -1) {
+            left_prop = -1;
+        }
+        double right_prop = right_target_rpm / (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60);
+        if (right_prop > 1) {
+            right_prop = 1;
+        }
+        if (right_prop < -1) {
+            right_prop = -1;
+        }
         return new Command(left_prop, right_prop);
     }
 
     public static void updateState(MainState state, Command command) {
-        // Wheel RPM
-        double left_rpm = inverseMotorController(command.left_pwr_prop, state.getLWheelVelVal(),
-                Constants.INIT_L_WHL_TRAC);
-        double right_rpm = inverseMotorController(command.right_pwr_prop, state.getRWheelVelVal(),
-                Constants.INIT_R_WHL_TRAC);
-        double left_var = inverseMotorControllerVariance(command.left_pwr_prop, state.getLWheelVelVar(),
-                Constants.INIT_L_WHL_TRAC);
-        double right_var = inverseMotorControllerVariance(command.right_pwr_prop, state.getRWheelVelVar(),
-                Constants.INIT_R_WHL_TRAC);
-        state.setLWheelVel(left_rpm, left_var);
-        state.setRWheelVel(right_rpm, right_var);
         // Accel + Ang Vel
         double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
 

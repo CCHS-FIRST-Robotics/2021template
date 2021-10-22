@@ -108,33 +108,4 @@ public class MainState {
         this.Phy.Val.ang_acc = val;
         this.Phy.Var.ang_acc = var;
     }
-
-    // Left wheel ang vel
-    public double getLWheelVelVal() {
-        return this.Phy.Val.l_whl_vel;
-    }
-
-    public double getLWheelVelVar() {
-        return this.Phy.Var.l_whl_vel;
-    }
-
-    public void setLWheelVel(double val, double var) {
-        this.Phy.Val.l_whl_vel = val;
-        this.Phy.Var.l_whl_vel = var;
-    }
-
-    // Right wheel ang vel
-    public double getRWheelVelVal() {
-        return this.Phy.Val.r_whl_vel;
-    }
-
-    public double getRWheelVelVar() {
-        return this.Phy.Var.r_whl_vel;
-    }
-
-    public void setRWheelVel(double val, double var) {
-        this.Phy.Val.r_whl_vel = val;
-        this.Phy.Var.r_whl_vel = var;
-    }
-
 }
