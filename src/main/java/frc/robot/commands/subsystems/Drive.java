@@ -12,7 +12,9 @@ public class Drive {
     }
 
     public void setDrives(double left_prop, double right_prop, HardwareObjects hardware) {
-        hardware.LEFT_MOTOR.set(ControlMode.PercentOutput, left_prop);
-        hardware.RIGHT_MOTOR.set(ControlMode.PercentOutput, right_prop * -1);
+        hardware.LEFT_MOTOR1.set(ControlMode.PercentOutput, left_prop);
+        hardware.LEFT_MOTOR2.set(ControlMode.PercentOutput, left_prop);
+        hardware.RIGHT_MOTOR1.set(ControlMode.PercentOutput, right_prop * -1);
+        hardware.RIGHT_MOTOR2.set(ControlMode.PercentOutput, right_prop * -1);
     }
 }
