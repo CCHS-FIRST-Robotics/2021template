@@ -24,12 +24,23 @@ public class CommandHelper {
         return new Command(left_prop, right_prop);
     }
 
+    public static double wheelForceFactor(double prop, double rel_vel) {
+        double maxms = (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS;
+        double factor = (prop * maxms - rel_vel) / maxms;
+        return factor;
+    }
+
     public static void updateState(MainState state, Command command) {
         // Accel + Ang Vel
         double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
 
-        double left_f = command.left_pwr_prop * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS;
-        double right_f = command.right_pwr_prop * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS;
+        double[] h_vec = SimpleMat.projectHeading(state.getHeadingVal(), 1);
+        double rel_vel = SimpleMat.scalarProject(h_vec, state.getVelVal());
+
+        double left_f = command.left_pwr_prop * Constants.MOTOR_MAX_TORQUE
+                * wheelForceFactor(command.left_pwr_prop, rel_vel) / Constants.WHEEL_RADIUS;
+        double right_f = command.right_pwr_prop * Constants.MOTOR_MAX_TORQUE
+                * wheelForceFactor(command.right_pwr_prop, rel_vel) / Constants.WHEEL_RADIUS;
 
         double torque = (right_f - left_f) * Constants.ROBOT_WIDTH * 0.5;
         double forward_f = (right_f + left_f);

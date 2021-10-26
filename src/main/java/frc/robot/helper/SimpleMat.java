@@ -25,6 +25,12 @@ public class SimpleMat {
         return newVec;
     }
 
+    public static double scalarProject(double[] reference, double[] given) {
+        double[] unit_ref = unitVec(reference);
+        double projection = unit_ref[0] * given[0] + unit_ref[1] * given[1];
+        return projection;
+    }
+
     public static double[] projectHeading(double heading, double scalar) {
         double[] projected = { -1 * Math.sin(heading) * scalar, Math.cos(heading) * scalar };
         return projected;
