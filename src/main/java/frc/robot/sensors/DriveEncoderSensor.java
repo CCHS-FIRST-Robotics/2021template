@@ -65,9 +65,9 @@ public class DriveEncoderSensor extends BaseSensor {
 
         double l_raw = hardware.LEFT_MOTOR1.getSelectedSensorVelocity(1);
         double r_raw = hardware.RIGHT_MOTOR1.getSelectedSensorVelocity(1);
-        // Convert to rads per sec
-        double l_radss = l_raw * 2 * Math.PI / 60;
-        double r_radss = r_raw * 2 * Math.PI * -1 / 60;
+        // Convert to 4096 units/rot / 100ms
+        double l_radss = l_raw * 2 * Math.PI / (4096 / 10);
+        double r_radss = r_raw * 2 * Math.PI * -1 / (4096 / 10);
 
         this.log_l_radss = l_radss;
         this.log_r_radss = r_radss;
@@ -114,7 +114,5 @@ public class DriveEncoderSensor extends BaseSensor {
         this.pos_var = state.getPosVar();
         this.heading_var = state.getHeadingVar();
 
-        System.out.println(r_radss);
-        System.out.println(l_radss);
     }
 }
