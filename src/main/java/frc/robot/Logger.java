@@ -7,6 +7,8 @@ public class Logger {
         if (rContainer.imu_sensor.log_active_sensor) {
             System.out.println("IMU Ready");
             System.out.println("IMU Fused Heading: " + String.valueOf(rContainer.imu_sensor.log_fused_heading));
+            double[] accv = rContainer.imu_sensor.log_acc;
+            System.out.println("IMU Accelerometer: (" + String.valueOf(accv[0]) + ", " + String.valueOf(accv[1]) + ")");
         } else {
             System.out.println("IMU Disconected");
         }

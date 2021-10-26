@@ -12,6 +12,7 @@ public class IMUSensor extends BaseSensor {
 
     public boolean log_active_sensor;
     public double log_fused_heading;
+    public double[] log_acc = { 0, 0 };
 
     public IMUSensor(double sync_time) {
         this.ang_var = Constants.BASE_HEADING_VAR;
@@ -43,6 +44,9 @@ public class IMUSensor extends BaseSensor {
 
         double x_acc = (double) xyz_acc[0] * 9.81 / 32768;
         double y_acc = (double) xyz_acc[1] * 9.81 / 32768;
+
+        this.log_acc[0] = x_acc;
+        this.log_acc[1] = y_acc;
 
         double heading = fusionStatus.heading;
         heading = heading * -1 * 2 * Math.PI / 360;
