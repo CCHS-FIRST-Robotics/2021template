@@ -44,15 +44,17 @@ public class Kinematics {
             double[] vel_unit = SimpleMat.unitVec(this.vel);
             double[] friction_a = { friction * Constants.GRAV_ACC * vel_unit[0],
                     friction * Constants.GRAV_ACC * vel_unit[1] };
+            double vel_mag = SimpleMat.mag(this.vel);
+            double friction_mag = SimpleMat.mag(friction_a);
+            if (friction_mag * dt > vel_mag) {
+                SimpleMat.scaleVec(friction_a, SimpleMat.mag(this.vel) / (dt * friction_mag));
+            }
             // POS
             this.pos[0] = this.pos[0] + this.vel[0] * dt + 0.5 * (this.acc[0] + friction_a[0]) * dt * dt;
             this.pos[1] = this.pos[1] + this.vel[1] * dt + 0.5 * (this.acc[1] + friction_a[1]) * dt * dt;
             // VEL
             this.vel[0] = this.vel[0] + (this.acc[0] + friction_a[0]) * dt;
             this.vel[1] = this.vel[1] + (this.acc[1] + friction_a[1]) * dt;
-            // ACCEL
-            this.acc[0] = this.acc[0] + friction_a[0];
-            this.acc[1] = this.acc[1] + friction_a[1];
             // HEADING
             double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
             double ang_fric = (this.ang_acc / (Math.abs(this.ang_acc) + 0.001)) * Constants.ROBOT_WIDTH
