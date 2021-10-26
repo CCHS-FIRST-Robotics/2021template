@@ -59,6 +59,11 @@ public final class Constants {
     public static final double ACC_VARIANCE = 0.1;
 
     // ==================
+    // ENCODER VARIANCE
+    // ==================
+    public static final double VAR_RAD_VAR = 0.004;
+
+    // ==================
     // TIME CONSTANTS
     // ==================
     public static final double MAIN_DT = 0.02;
