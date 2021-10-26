@@ -20,6 +20,9 @@ public class DriveEncoderSensor extends BaseSensor {
     double o_local_delta[] = { 0, 0 };
     double VARIANCE = 0.05;
 
+    public double log_l_radss = 0;
+    public double log_r_radss = 0;
+
     public DriveEncoderSensor(double sync_time) {
         this.LAG_TIME = 0.0; // No Lag
         this.SYNC_TIME = sync_time;
@@ -61,8 +64,11 @@ public class DriveEncoderSensor extends BaseSensor {
         double l_raw = hardware.LEFT_MOTOR1.getSelectedSensorVelocity(1);
         double r_raw = hardware.RIGHT_MOTOR1.getSelectedSensorVelocity(1);
         // Convert to rads per sec
-        double l_radss = l_raw * 2 * Math.PI * -1 / 60;
-        double r_radss = r_raw * 2 * Math.PI / 60;
+        double l_radss = l_raw * 2 * Math.PI / 60;
+        double r_radss = r_raw * 2 * Math.PI * -1 / 60;
+
+        this.log_l_radss = l_radss;
+        this.log_r_radss = r_radss;
 
         localDisplacement(l_radss, r_radss, Constants.MAIN_DT);
 

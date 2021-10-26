@@ -10,12 +10,16 @@ public class IMUSensor extends BaseSensor {
 
     double VARIANCE = 0.01;
 
+    public boolean log_active_sensor;
+    public double log_fused_heading;
+
     public IMUSensor(double sync_time) {
         this.VARIANCE = 0.01;
         this.SYNC_TIME = sync_time;
     }
 
     public boolean shouldUse(HardwareObjects hardware) {
+        this.log_active_sensor = (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
         return (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
     }
 
@@ -28,6 +32,8 @@ public class IMUSensor extends BaseSensor {
 
         double heading = fusionStatus.heading;
         heading = heading * -1 * 2 * Math.PI / 360;
+
+        this.log_fused_heading = heading;
 
         double thetas = xyz_dps[3] * -1 * 2 * Math.PI / 360;
 

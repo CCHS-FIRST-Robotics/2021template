@@ -20,6 +20,11 @@ public class SimpleMat {
         return unit;
     }
 
+    public static double[] scaleVec(double[] vec, double scalar) {
+        double[] newVec = { vec[0] * scalar, vec[1] * scalar };
+        return newVec;
+    }
+
     public static double[] projectHeading(double heading, double scalar) {
         double[] projected = { -1 * Math.sin(heading) * scalar, Math.cos(heading) * scalar };
         return projected;
