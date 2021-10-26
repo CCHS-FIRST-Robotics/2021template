@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
+import frc.robot.helper.Logging;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot{
    * initialization code.
    */
   private RobotContainer robotContainer;
+  Logging log = new Logging();
   public Robot(){
     this.robotContainer = new RobotContainer();
     addPeriodic(() -> {this.robotContainer.mainLoop();}, Constants.MAIN_DT);
@@ -66,7 +68,15 @@ public class Robot extends TimedRobot{
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    System.out.println(log.getVersion());
+    int varEx1 = 1;
+    int varEx2 = 2;
+    int varEx3 = 3;
+    String[] nameExample = {"Motor 1", "Motor 2", "Motor 3"};
+    int[] valueExample = {varEx1, varEx2, varEx3};
+    log.printInfo(nameExample, valueExample);
+  }
 
   @Override
   public void teleopInit() {
@@ -79,7 +89,9 @@ public class Robot extends TimedRobot{
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    System.out.println(log.getVersion());
+  }
 
   @Override
   public void testInit() {
