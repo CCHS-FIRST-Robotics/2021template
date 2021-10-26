@@ -64,6 +64,14 @@ public final class Constants {
     public static final double VAR_RAD_VAR = 0.004;
 
     // ==================
+    // IMU VARIANCE
+    // ==================
+    public static final double BASE_HEADING_VAR = 0.1;
+    public static final double DELTA_VAR = 0.001;
+    public static final double MAX_HEADING_VAR = 0.2;
+
+    public static final double IMU_ACC_VAR = 0.05;
+    // ==================
     // TIME CONSTANTS
     // ==================
     public static final double MAIN_DT = 0.02;

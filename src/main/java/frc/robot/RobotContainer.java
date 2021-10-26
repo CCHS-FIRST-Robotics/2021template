@@ -52,15 +52,18 @@ public class RobotContainer {
   }
 
   public void mainLoop() {
+    this.main_command = this.ai.getCommand(this.main_state);
+
+    CommandHelper.updateState(this.main_state, this.main_command);
+    this.command_handler.scheduleCommands(this.main_command, this.hardware);
+
     if (this.drive_encoder_sensor.shouldUse()) {
       this.drive_encoder_sensor.processValue(this.main_state, this.hardware);
     }
     if (this.imu_sensor.shouldUse(this.hardware)) {
       this.imu_sensor.processValue(this.main_state, this.hardware);
     }
-    this.main_command = this.ai.getCommand(this.main_state);
-    CommandHelper.updateState(this.main_state, this.main_command);
-    this.command_handler.scheduleCommands(this.main_command, this.hardware);
+
     this.main_state.predict(Constants.MAIN_DT);
 
     // Logging
