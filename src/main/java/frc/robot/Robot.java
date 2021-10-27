@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     }, 5);
 
     addPeriodic(() -> {
-
+      loggingConfigure(this.robotContainer);
     }, 1);
   }
 
