@@ -26,11 +26,30 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   Logging log = new Logging();
 
+  public void loggingConfigure(RobotContainer rContainer) {
+    double[] accv = rContainer.imu_sensor.log_acc;
+    String[] name = { "IMU Fused Heading", "Acceleration 0", "Acceleration 1", "L Encoder Radss", "R Encoder Radss",
+        "Predicted Heading", "Predicted X Pos", "Predicted Y Pos" };
+    double[] value = { rContainer.imu_sensor.log_fused_heading, accv[0], accv[1],
+        rContainer.drive_encoder_sensor.log_l_radss, rContainer.drive_encoder_sensor.log_r_radss,
+        rContainer.main_state.getHeadingVal(), rContainer.main_state.getPosVal()[0],
+        rContainer.main_state.getPosVal()[1] };
+    log.printInfo(name, value);
+  }
+
   public Robot() {
     this.robotContainer = new RobotContainer();
     addPeriodic(() -> {
       this.robotContainer.mainLoop();
     }, Constants.MAIN_DT);
+
+    addPeriodic(() -> {
+      System.out.println(log.getVersion());
+    }, 5);
+
+    addPeriodic(() -> {
+
+    }, 1);
   }
 
   @Override
@@ -84,13 +103,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println(log.getVersion());
-    int varEx1 = 1;
-    int varEx2 = 2;
-    int varEx3 = 3;
-    String[] nameExample = { "Motor 1", "Motor 2", "Motor 3" };
-    int[] valueExample = { varEx1, varEx2, varEx3 };
-    log.printInfo(nameExample, valueExample);
   }
 
   @Override
@@ -105,18 +117,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    System.out.println(log.getVersion());
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    Logger.periodPrint(this.robotContainer);
   }
 }

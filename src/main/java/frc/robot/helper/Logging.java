@@ -7,8 +7,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * Used to keep track of general version of robot's code
- * Update Version after major changes to any part of code!
+ * Used to keep track of general version of robot's code Update Version after
+ * major changes to any part of code!
  *
  * @author Brian T.
  * @version 1.0
@@ -24,12 +24,9 @@ public class Logging {
      * 
      * @return String version
      */
-    public String getVersion() {                                                                                                                                   
-        String version = "________________________" 
-        + "\n Program Version: " + globalVersion
-        + "\n Version Date: " + verDate
-        + "\n Last Update: " + loggingLastUpdate
-        + "\n------------------------";
+    public String getVersion() {
+        String version = "________________________" + "\n Program Version: " + globalVersion + "\n Version Date: "
+                + verDate + "\n Last Update: " + loggingLastUpdate + "\n------------------------";
 
         return version;
     }
@@ -46,8 +43,7 @@ public class Logging {
         try {
 
             Path file = Paths.get(filePath);
-            BasicFileAttributes attr =
-                Files.readAttributes(file, BasicFileAttributes.class);
+            BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
             loggingLastUpdate = "" + attr.lastModifiedTime();
 
         } catch (IOException e) {
@@ -59,8 +55,8 @@ public class Logging {
     }
 
     /**
-     * Gives a timestamp on when given file was last modified
-     * to be called from other programs if needed
+     * Gives a timestamp on when given file was last modified to be called from
+     * other programs if needed
      * 
      * @return String timestamp
      */
@@ -70,8 +66,7 @@ public class Logging {
         try {
 
             Path file = Paths.get(filePath);
-            BasicFileAttributes attr =
-                Files.readAttributes(file, BasicFileAttributes.class);
+            BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
             lastUpdate = "" + attr.lastModifiedTime();
 
         } catch (IOException e) {
@@ -82,16 +77,16 @@ public class Logging {
     }
 
     /**
-     * For printing out information for data collection, debugging, etc.
-     * to be called from other programs if needed
+     * For printing out information for data collection, debugging, etc. to be
+     * called from other programs if needed
      * 
      * @param String[] names of info being printed
-     * @param int[] respective values
+     * @param int[]    respective values
      */
-    public void printInfo(String[] names, int[] values) {
+    public void printInfo(String[] names, double[] values) {
         divider();
         for (int i = 0; i < names.length; i++) {
-            System.out.println(names[i] + ": " + values[i]);
+            System.out.println(names[i] + ": " + String.valueOf(values[i]));
         }
         divider();
     }
@@ -99,7 +94,5 @@ public class Logging {
     public void divider() {
         System.out.println("===========================");
     }
-    
-
 
 }

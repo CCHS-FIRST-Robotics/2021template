@@ -15,7 +15,7 @@ public class HardwareObjects {
         LEFT_MOTOR2 = new WPI_VictorSPX(Constants.L_VICTOR_PORT2);
         RIGHT_MOTOR1 = new WPI_TalonSRX(Constants.R_TALON_PORT1);
         RIGHT_MOTOR2 = new WPI_TalonSRX(Constants.R_TALON_PORT2);
-        IMU = new PigeonIMU(Constants.IMU_PORT);
+        IMU = new PigeonIMU(RIGHT_MOTOR2);
 
         LEFT_MOTOR1.configFactoryDefault();
         RIGHT_MOTOR1.configFactoryDefault();
