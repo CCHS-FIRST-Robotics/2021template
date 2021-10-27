@@ -61,7 +61,7 @@ public class Kinematics {
                     * Constants.GRAV_ACC * friction / (2 * m_o_i);
 
             this.heading = this.heading + this.ang_vel * dt + 0.5 * (this.ang_acc + ang_fric) * dt * dt;
-            this.heading = this.heading % (2 * Math.PI);
+            this.heading = SimpleMat.angleRectifier(this.heading);
             // ANG VEL
             if (Math.abs(this.ang_acc) < Math.abs(ang_fric)) {
                 if (Math.abs(this.ang_acc + ang_fric) * dt > Math.abs(this.ang_vel)) {

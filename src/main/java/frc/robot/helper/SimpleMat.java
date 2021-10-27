@@ -35,4 +35,12 @@ public class SimpleMat {
         double[] projected = { -1 * Math.sin(heading) * scalar, Math.cos(heading) * scalar };
         return projected;
     }
+
+    public static double angleRectifier(double theta) {
+        double remainder = theta % (2 * Math.PI);
+        if (remainder > Math.PI) {
+            remainder = 2 * Math.PI - remainder;
+        }
+        return remainder;
+    }
 }

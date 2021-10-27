@@ -23,8 +23,8 @@ public class Controller {
     public Command getCommands(MainState state) {
         double x_prop = xbox.getX(Hand.kLeft);
         double y_prop = xbox.getY(Hand.kLeft);
-        double l_avel = Math.min(1, Math.max(-1, y_prop - x_prop)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
-        double r_avel = Math.min(1, Math.max(-1, y_prop + x_prop)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
+        double l_avel = Math.min(1, Math.max(-1, y_prop * -1 + x_prop)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
+        double r_avel = Math.min(1, Math.max(-1, y_prop * -1 - x_prop)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
         Command command = CommandHelper.computeCommand(l_avel, r_avel);
 
         // Logging

@@ -51,17 +51,17 @@ public final class Constants {
 
     public static final double INIT_DW = 0.4;
 
-    public static final double INIT_VARIANCE = 0.01;
+    public static final double INIT_VARIANCE = 0.0;
     // ==================
     // VARIANCE LINEAR APPROX
     // ==================
-    public static final double ANG_VEL_VARIANCE = 0.5;
-    public static final double ACC_VARIANCE = 0.1;
+    public static final double ANG_VEL_VARIANCE = 1;
+    public static final double ACC_VARIANCE = 2;
 
     // ==================
     // ENCODER VARIANCE
     // ==================
-    public static final double VAR_RAD_VAR = 0.004;
+    public static final double VAR_RAD_VAR = 0.01;
 
     // ==================
     // IMU VARIANCE
@@ -70,7 +70,7 @@ public final class Constants {
     public static final double DELTA_VAR = 0.001;
     public static final double MAX_HEADING_VAR = 0.2;
 
-    public static final double IMU_ACC_VAR = 0.05;
+    public static final double IMU_ACC_VAR = 1;
     // ==================
     // TIME CONSTANTS
     // ==================
@@ -94,7 +94,7 @@ public final class Constants {
     // ==================
     public static final double ROBOT_WIDTH = 0.635;
     public static final double WHEEL_RADIUS = 0.09;
-    public static final double ROBOT_MASS = 40;
+    public static final double ROBOT_MASS = 20;
 
     public static final double GRAV_ACC = -9.81;
 

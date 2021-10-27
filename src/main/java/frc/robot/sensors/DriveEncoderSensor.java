@@ -79,12 +79,15 @@ public class DriveEncoderSensor extends BaseSensor {
 
         double[] pred_pos = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
 
-        double new_heading = this.heading + this.arc_angle;
+        double new_heading = this.heading + SimpleMat.angleRectifier(this.arc_angle);
 
         // compute variances
         double dist_coeff = (Math.abs(l_radss) + Math.abs(r_radss)) * Constants.MAIN_DT / (2 * Math.PI);
         double p_var = this.pos_var
                 + Constants.VAR_RAD_VAR * dist_coeff * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
+
+        double v_var = Constants.VAR_RAD_VAR * dist_coeff * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC
+                / Constants.MAIN_DT;
 
         double diff_coeff = (Math.abs(l_radss - r_radss)) * Constants.MAIN_DT / (2 * Math.PI);
         double h_var = this.heading_var
@@ -92,11 +95,19 @@ public class DriveEncoderSensor extends BaseSensor {
 
         double h_ang_var = Constants.VAR_RAD_VAR * diff_coeff / Constants.ROBOT_WIDTH;
 
-        // pos
+        // Pos
         double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var);
         double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var);
         double[] kpos = { xpos[0], ypos[1] };
         state.setPos(kpos, xpos[1]);
+
+        // Vel
+        double[] xvel = state.kalmanUpdate(state.getVelVal()[0], state.getVelVar(), o_delta[0] / Constants.MAIN_DT,
+                v_var);
+        double[] yvel = state.kalmanUpdate(state.getVelVal()[1], state.getVelVar(), o_delta[1] / Constants.MAIN_DT,
+                v_var);
+        double[] kvel = { xvel[0], yvel[0] };
+        state.setVel(kvel, xvel[1]);
 
         // Heading
         double[] kheading = state.kalmanUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading, h_var);

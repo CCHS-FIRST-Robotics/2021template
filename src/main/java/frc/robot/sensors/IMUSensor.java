@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import frc.robot.Constants;
 import frc.robot.HardwareObjects;
 import frc.robot.state.MainState;
+import frc.robot.helper.*;
 
 public class IMUSensor extends BaseSensor {
 
@@ -13,6 +14,10 @@ public class IMUSensor extends BaseSensor {
     public boolean log_active_sensor;
     public double log_fused_heading;
     public double[] log_acc = { 0, 0 };
+
+    double x_acc_zero = 0;
+    double[] yz_acc_zero = { 0, 9.81 };
+    double yz_mag_zero = 9.81;
 
     public IMUSensor(double sync_time) {
         this.ang_var = Constants.BASE_HEADING_VAR;
@@ -31,6 +36,20 @@ public class IMUSensor extends BaseSensor {
         }
     }
 
+    public void reset(HardwareObjects hardware) {
+        short[] xyz_acc = new short[3];
+        hardware.IMU.getBiasedAccelerometer(xyz_acc);
+        double x_acc = (double) xyz_acc[0] * -9.81 / 16384;
+        double y_acc = (double) xyz_acc[1] * -9.81 / 16384;
+        double z_acc = (double) xyz_acc[2] * -9.81 / 16384;
+
+        this.x_acc_zero = x_acc;
+        this.yz_acc_zero[0] = y_acc;
+        this.yz_acc_zero[1] = z_acc;
+
+        this.yz_mag_zero = SimpleMat.mag(this.yz_acc_zero);
+    }
+
     public void processValue(MainState state, HardwareObjects hardware) {
         double[] xyz_dps = new double[3];
         short[] xyz_acc = new short[3];
@@ -42,14 +61,26 @@ public class IMUSensor extends BaseSensor {
         hardware.IMU.getBiasedAccelerometer(xyz_acc);
         // 16384 = 1g
 
-        double x_acc = (double) xyz_acc[0] * 9.81 / 32768;
-        double y_acc = (double) xyz_acc[1] * 9.81 / 32768;
+        double x_acc = (double) xyz_acc[0] * -9.81 / 16384;
+        x_acc = x_acc - x_acc_zero;
+        double[] yz_acc = { (double) xyz_acc[1] * -9.81 / 16384, (double) xyz_acc[2] * -9.81 / 16384 };
+
+        double acc_mag = SimpleMat.mag(yz_acc) - this.yz_mag_zero;
+        double y_acc = 0;
+        if (acc_mag > 0) {
+            if (yz_acc[0] > yz_acc_zero[0]) {
+                y_acc = acc_mag;
+            } else {
+                y_acc = -1 * acc_mag;
+            }
+        }
 
         this.log_acc[0] = x_acc;
         this.log_acc[1] = y_acc;
 
         double heading = fusionStatus.heading;
         heading = heading * -1 * 2 * Math.PI / 360;
+        heading = SimpleMat.angleRectifier(heading);
 
         this.log_fused_heading = heading;
 
