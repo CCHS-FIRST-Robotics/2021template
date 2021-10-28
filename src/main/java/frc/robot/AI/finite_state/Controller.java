@@ -28,8 +28,6 @@ public class Controller {
         Command command = CommandHelper.computeCommand(l_avel, r_avel);
 
         // Logging
-        System.out.println("Left desired angular velocity: " + String.valueOf(l_avel));
-        System.out.println("Right desired angular velocity: " + String.valueOf(r_avel));
         return command;
     }
 }

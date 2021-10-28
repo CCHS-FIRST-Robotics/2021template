@@ -83,7 +83,7 @@ public final class Constants {
 
     public static final double MOTOR_MAX_TORQUE = 40.247;
 
-    public static final double MOTOR_MAX_RPM = 317;
+    public static final double MOTOR_MAX_RPM = 65.117;
 
     public static final double MOTOR_PROP_VAR = 0.1;
 

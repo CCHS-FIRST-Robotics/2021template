@@ -99,7 +99,7 @@ public class DriveEncoderSensor extends BaseSensor {
         double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var);
         double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var);
         double[] kpos = { xpos[0], ypos[1] };
-        state.setPos(kpos, xpos[1]);
+        state.setPos(pred_pos, xpos[1]);
 
         // Vel
         double[] xvel = state.kalmanUpdate(state.getVelVal()[0], state.getVelVar(), o_delta[0] / Constants.MAIN_DT,
