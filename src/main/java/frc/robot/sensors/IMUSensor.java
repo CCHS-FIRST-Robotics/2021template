@@ -85,7 +85,7 @@ public class IMUSensor extends BaseSensor {
 
         this.log_fused_heading = heading;
 
-        double thetas = xyz_dps[3] * -1 * 2 * Math.PI / 360;
+        double thetas = xyz_dps[2] * -1 * 2 * Math.PI / 360;
 
         double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), heading, ang_var);
         state.setHeading(kheading[0], kheading[1]);
