@@ -76,6 +76,9 @@ public class IMUSensor extends BaseSensor {
         double zt_acc = (double) xyz_acc[2] * -9.81 / 16384;
         double y_acc = yt_acc * Math.cos(r_pitch) - zt_acc * Math.sin(r_pitch);
 
+        double[] acc_l_vec = { x_acc, y_acc };
+        double[] global_acc = SimpleMat.rot2d(acc_l_vec, state.getHeadingVal());
+
         this.log_acc[0] = x_acc;
         this.log_acc[1] = y_acc;
         this.log_pitch = r_pitch;
@@ -98,10 +101,12 @@ public class IMUSensor extends BaseSensor {
 
         state.setAngVel(kangvel[0], kangvel[1]);
 
-        double[] kxacc = state.kalmanUpdate(state.getAccVal()[0], state.getAccVar(), x_acc, Constants.IMU_ACC_VAR);
-        double[] kyacc = state.kalmanUpdate(state.getAccVal()[1], state.getAccVar(), y_acc, Constants.IMU_ACC_VAR);
+        double[] kxacc = state.kalmanUpdate(state.getAccVal()[0], state.getAccVar(), global_acc[0],
+                Constants.IMU_ACC_VAR);
+        double[] kyacc = state.kalmanUpdate(state.getAccVal()[1], state.getAccVar(), global_acc[1],
+                Constants.IMU_ACC_VAR);
 
-        double[] new_acc = { kxacc[0], kyacc[0] };
+        double[] new_acc = { kxacc[0], kyacc[1] };
         state.setAcc(new_acc, kxacc[1]);
 
         updateHeadingVar();
