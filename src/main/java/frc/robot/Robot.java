@@ -28,9 +28,9 @@ public class Robot extends TimedRobot {
 
   public void loggingConfigure(RobotContainer rContainer) {
     double[] accv = rContainer.imu_sensor.log_acc;
-    String[] name = { "IMU Fused Heading", "Acceleration 0", "Acceleration 1", "L Encoder Radss", "R Encoder Radss",
-        "Predicted Heading", "Predicted X Pos", "Predicted Y Pos" };
-    double[] value = { rContainer.imu_sensor.log_fused_heading, accv[0], accv[1],
+    String[] name = { "IMU Fused Heading", "Pitch", "Acceleration 0", "Acceleration 1", "L Encoder Radss",
+        "R Encoder Radss", "Predicted Heading", "Predicted X Pos", "Predicted Y Pos" };
+    double[] value = { rContainer.imu_sensor.log_fused_heading, rContainer.imu_sensor.log_pitch, accv[0], accv[1],
         rContainer.drive_encoder_sensor.log_l_radss, rContainer.drive_encoder_sensor.log_r_radss,
         rContainer.main_state.getHeadingVal(), rContainer.main_state.getPosVal()[0],
         rContainer.main_state.getPosVal()[1] };
@@ -111,6 +111,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    this.robotContainer.reset();
     this.robotContainer.setControllerState();
   }
 

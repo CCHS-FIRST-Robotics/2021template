@@ -12,7 +12,30 @@ public class MainState {
     public double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
         double kalman_gain = current_var / (current_var + sensed_var);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
-        double new_var = (1 - kalman_gain) * current_var;
+        double new_var = kalman_gain * sensed_var + (1 - kalman_gain) * current_var;
+        if (Double.isNaN(new_val) || Double.isNaN(new_var)) {
+            double[] new_1 = { current_val, current_var };
+            return new_1;
+        } else {
+            double[] new_1 = { new_val, new_var };
+            return new_1;
+        }
+    }
+
+    public double[] kalmanAngleUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
+        double[] candidate_sval = { sensed_val - 2 * Math.PI, sensed_val, sensed_val + 2 * Math.PI };
+        double new_sval = 0;
+        double closest = 2 * Math.PI;
+        for (int i = 0; i < 3; i++) {
+            double dist = Math.abs(candidate_sval[i] - current_val);
+            if (dist < closest) {
+                closest = dist;
+                new_sval = candidate_sval[i];
+            }
+        }
+        double kalman_gain = current_var / (current_var + sensed_var);
+        double new_val = kalman_gain * new_sval + (1 - kalman_gain) * current_val;
+        double new_var = kalman_gain * sensed_var + (1 - kalman_gain) * current_var;
         if (Double.isNaN(new_val) || Double.isNaN(new_var)) {
             double[] new_1 = { current_val, current_var };
             return new_1;

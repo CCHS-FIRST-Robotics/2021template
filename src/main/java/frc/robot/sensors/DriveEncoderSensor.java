@@ -110,7 +110,7 @@ public class DriveEncoderSensor extends BaseSensor {
         state.setVel(kvel, xvel[1]);
 
         // Heading
-        double[] kheading = state.kalmanUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading, h_var);
+        double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading, h_var);
         state.setHeading(kheading[0], kheading[1]);
 
         // Ang Vel

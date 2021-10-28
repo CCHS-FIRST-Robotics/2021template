@@ -45,32 +45,32 @@ public final class Constants {
     public static final double INIT_L_WHL_TRAC = 0.9;
     public static final double INIT_R_WHL_TRAC = 0.9;
 
-    public static final double INIT_FRICTION = 1.3;
+    public static final double INIT_FRICTION = 0.2;
 
     public static final double INIT_MIX = 0.5;
 
     public static final double INIT_DW = 0.4;
 
-    public static final double INIT_VARIANCE = 0.0;
+    public static final double INIT_VARIANCE = 0.001;
     // ==================
     // VARIANCE LINEAR APPROX
     // ==================
-    public static final double ANG_VEL_VARIANCE = 1;
-    public static final double ACC_VARIANCE = 2;
+    public static final double ANG_VEL_VARIANCE = 1.5 * 1.5;
+    public static final double ACC_VARIANCE = 2 * 2;
 
     // ==================
     // ENCODER VARIANCE
     // ==================
-    public static final double VAR_RAD_VAR = 0.01;
+    public static final double VAR_RAD_VAR = 0.1 * 0.1;
 
     // ==================
     // IMU VARIANCE
     // ==================
-    public static final double BASE_HEADING_VAR = 0.1;
-    public static final double DELTA_VAR = 0.001;
-    public static final double MAX_HEADING_VAR = 0.2;
+    public static final double BASE_HEADING_VAR = 0.2 * 0.2;
+    public static final double DELTA_VAR = 0.0001;
+    public static final double MAX_HEADING_VAR = 0.3 * 0.3;
 
-    public static final double IMU_ACC_VAR = 1;
+    public static final double IMU_ACC_VAR = 1.0 * 1.0;
     // ==================
     // TIME CONSTANTS
     // ==================
@@ -81,9 +81,9 @@ public final class Constants {
     // ==================
     public static final double MOTOR_MAX_POWER = 674; // OUTPUT IN WATTS
 
-    public static final double MOTOR_MAX_TORQUE = 4.82;
+    public static final double MOTOR_MAX_TORQUE = 40.247;
 
-    public static final double MOTOR_MAX_RPM = 666;
+    public static final double MOTOR_MAX_RPM = 317;
 
     public static final double MOTOR_PROP_VAR = 0.1;
 

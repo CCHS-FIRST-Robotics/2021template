@@ -39,7 +39,7 @@ public class SimpleMat {
     public static double angleRectifier(double theta) {
         double remainder = theta % (2 * Math.PI);
         if (remainder > Math.PI) {
-            remainder = 2 * Math.PI - remainder;
+            remainder = remainder - 2 * Math.PI;
         }
         return remainder;
     }

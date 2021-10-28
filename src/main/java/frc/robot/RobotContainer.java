@@ -45,10 +45,18 @@ public class RobotContainer {
     this.drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
     this.imu_sensor = new IMUSensor(SYNC_TIME);
     this.hardware = new HardwareObjects();
+
+    reset();
   }
 
   public void init() {
 
+  }
+
+  public void reset() {
+    this.imu_sensor.reset(this.hardware);
+    this.main_command = new Command(0, 0);
+    this.main_state = new MainState();
   }
 
   public void mainLoop() {
