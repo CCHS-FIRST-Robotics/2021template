@@ -21,13 +21,12 @@ public class PID {
         this.previous_time = (double) System.currentTimeMillis() / 1000;
     }
 
-    public double update(double set_point, double value) {
+    public double update(double delta) {
         double current_time = (double) System.currentTimeMillis() / 1000;
         double dt = current_time - this.previous_time;
         if (dt == 0) {
             dt = 0.0001;
         }
-        double delta = set_point - value;
         double deriv = (delta - this.previous) / dt;
         this.integral = this.integral + delta * dt;
 
