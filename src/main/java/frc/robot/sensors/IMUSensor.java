@@ -15,6 +15,7 @@ public class IMUSensor extends BaseSensor {
     public double log_fused_heading;
     public double[] log_acc = { 0, 0 };
     public double log_pitch;
+    public double log_yaw_vel;
 
     double x_acc_zero = 0;
     double[] yz_acc_zero = { 0, 9.81 };
@@ -86,6 +87,8 @@ public class IMUSensor extends BaseSensor {
         this.log_fused_heading = heading;
 
         double thetas = xyz_dps[3] * -1 * 2 * Math.PI / 360;
+
+        this.log_yaw_vel = thetas;
 
         double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), heading, ang_var);
         state.setHeading(kheading[0], kheading[1]);
