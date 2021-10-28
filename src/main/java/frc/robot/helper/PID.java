@@ -1,5 +1,40 @@
 package frc.robot.helper;
 
 public class PID {
+    double integral = 0;
+    double previous;
+    double previous_time;
 
+    double k_p = 0.1;
+    double k_i = 0.01;
+    double k_d = 0.01;
+
+    public PID(double s_p, double s_i, double s_d) {
+        this.k_p = s_p;
+        this.k_i = s_i;
+        this.k_d = s_d;
+        reset();
+    }
+
+    public void reset() {
+        this.integral = 0;
+        this.previous_time = (double) System.currentTimeMillis() / 1000;
+    }
+
+    public double update(double set_point, double value) {
+        double current_time = (double) System.currentTimeMillis() / 1000;
+        double dt = current_time - this.previous_time;
+        if (dt == 0) {
+            dt = 0.0001;
+        }
+        double delta = set_point - value;
+        double deriv = (delta - this.previous) / dt;
+        this.integral = this.integral + delta * dt;
+
+        double response = k_p * delta + k_i * this.integral + k_d * deriv;
+
+        this.previous = delta;
+        this.previous_time = current_time;
+        return response;
+    }
 }
