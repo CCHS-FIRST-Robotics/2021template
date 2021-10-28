@@ -42,8 +42,8 @@ public final class Constants {
     public static final double INIT_L_WHL_VEL = 0;
     public static final double INIT_R_WHL_VEL = 0;
 
-    public static final double INIT_L_WHL_TRAC = 0.9;
-    public static final double INIT_R_WHL_TRAC = 0.9;
+    public static final double INIT_L_WHL_TRAC = 0.95;
+    public static final double INIT_R_WHL_TRAC = 0.95;
 
     public static final double INIT_FRICTION = 0.2;
 

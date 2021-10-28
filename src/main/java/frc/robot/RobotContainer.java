@@ -14,6 +14,7 @@ import frc.robot.commands.CommandHelper;
 import frc.robot.sensors.DriveEncoderSensor;
 import frc.robot.sensors.IMUSensor;
 import frc.robot.HardwareObjects;
+import frc.robot.network.*;
 
 import static frc.robot.Constants.*;
 
@@ -35,6 +36,7 @@ public class RobotContainer {
   public CommandHandler command_handler = new CommandHandler();
   public Command main_command = new Command(0, 0);
   public HardwareObjects hardware;
+  public Network network;
 
   public RobotContainer() {
     this.main_state = new MainState();
@@ -45,6 +47,7 @@ public class RobotContainer {
     this.drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
     this.imu_sensor = new IMUSensor(SYNC_TIME);
     this.hardware = new HardwareObjects();
+    this.network = new Network();
 
     reset();
   }
@@ -57,6 +60,7 @@ public class RobotContainer {
     this.imu_sensor.reset(this.hardware);
     this.main_command = new Command(0, 0);
     this.main_state = new MainState();
+    this.network.init();
   }
 
   public void mainLoop() {
@@ -75,7 +79,7 @@ public class RobotContainer {
     this.main_state.predict(Constants.MAIN_DT);
 
     // Logging
-
+    this.network.writeNTable();
   }
 
   public void setControllerState() {

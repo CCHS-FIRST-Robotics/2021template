@@ -43,4 +43,28 @@ public class SimpleMat {
         }
         return remainder;
     }
+
+    public static double dot(double[] a, double[] b) {
+        return a[0] * b[0] + a[1] * b[1];
+    }
+
+    public static double angle2Vec(double[] a, double[] b) {
+        double cos_val = dot(a, b) / (mag(a) * mag(b));
+        double diff = Math.acos(cos_val);
+        // determine if its left rot or right by calculating global vert theta
+        double a_theta = Math.acos(unitVec(a)[1]);
+        double b_theta = Math.acos(unitVec(b)[1]);
+
+        double left_turn = b_theta - a_theta;
+        double right_turn = 2 * Math.PI - left_turn;
+        double turn;
+        if (left_turn < right_turn){
+            turn = diff;
+        }
+        else{
+            turn = diff * -1;
+        }
+
+        return turn;
+    }
 }
