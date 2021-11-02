@@ -24,6 +24,8 @@ public class DriveEncoderSensor extends BaseSensor {
 
     public double log_l_radss = 0;
     public double log_r_radss = 0;
+    public double log_h_pred = 0;
+    public double log_hk_pred = 0;
 
     public DriveEncoderSensor(double sync_time) {
         this.LAG_TIME = 0.0; // No Lag
@@ -66,8 +68,8 @@ public class DriveEncoderSensor extends BaseSensor {
         double l_raw = hardware.LEFT_MOTOR1.getSelectedSensorVelocity(1);
         double r_raw = hardware.RIGHT_MOTOR1.getSelectedSensorVelocity(1);
         // Convert to 4096 units/rot / 100ms
-        double l_radss = l_raw * 2 * Math.PI * -1 / (4096 / 10);
-        double r_radss = r_raw * 2 * Math.PI / (4096 / 10);
+        double l_radss = l_raw * 2 * Math.PI * -1 / (4096 * 8.35 / 10);
+        double r_radss = r_raw * 2 * Math.PI / (4096 * 8.35 / 10);
 
         this.log_l_radss = l_radss;
         this.log_r_radss = r_radss;
@@ -111,7 +113,9 @@ public class DriveEncoderSensor extends BaseSensor {
 
         // Heading
         double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading, h_var);
-        state.setHeading(kheading[0], kheading[1]);
+        this.log_h_pred = new_heading;
+        this.log_hk_pred = kheading[0];
+        // state.setHeading(kheading[0], kheading[1]);
 
         // Ang Vel
         double[] kangvel = state.kalmanUpdate(state.getAngVelVal(), state.getAngVelVar(),

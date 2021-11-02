@@ -84,7 +84,7 @@ public class IMUSensor extends BaseSensor {
         this.log_pitch = r_pitch;
 
         double heading = fusionStatus.heading;
-        heading = heading * -1 * 2 * Math.PI / 360;
+        heading = heading * 2 * Math.PI / 360;
         heading = SimpleMat.angleRectifier(heading);
 
         this.log_fused_heading = heading;

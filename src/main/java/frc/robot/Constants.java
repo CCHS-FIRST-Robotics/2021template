@@ -98,4 +98,16 @@ public final class Constants {
 
     public static final double GRAV_ACC = -9.81;
 
+    // ==================
+    // PATHING CONSTANTS
+    // ==================
+    public static final double NO_ORIENT_DIST = 0.5;
+
+    public static final double TIMER_LEEWAY = 1.3;
+
+    public static final double ACCEPTABLE_DIST_ERROR = 0.3;
+
+    public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
+
+    public static final double TURN_RATE = 2;
 }

@@ -3,10 +3,10 @@ package frc.robot.ai.finite_state;
 import frc.robot.state.*;
 import frc.robot.commands.*;
 
-public class Autonomous {
+public class AutonomousTestDrive {
     double start_time = 0;
 
-    public Autonomous() {
+    public AutonomousTestDrive() {
         this.start_time = (double) System.currentTimeMillis() / 1000;
     }
 

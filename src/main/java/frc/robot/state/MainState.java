@@ -24,8 +24,8 @@ public class MainState {
 
     public double[] kalmanAngleUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
         double[] candidate_sval = { sensed_val - 2 * Math.PI, sensed_val, sensed_val + 2 * Math.PI };
-        double new_sval = 0;
-        double closest = 2 * Math.PI;
+        double new_sval = sensed_val;
+        double closest = 8 * Math.PI;
         for (int i = 0; i < 3; i++) {
             double dist = Math.abs(candidate_sval[i] - current_val);
             if (dist < closest) {

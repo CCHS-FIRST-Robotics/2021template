@@ -7,18 +7,21 @@ import frc.robot.commands.*;
 //AI IS A STATE MACHINE
 public class AI {
     enum States {
-        CONTROLLER, AUTONOMOUS
+        CONTROLLER, AUTONOMOUS, DISABLED
     }
 
     public States current_state = States.CONTROLLER;
     public Controller controller_state = new Controller();
     public Command main_command = new Command(0, 0);
-    public Autonomous autonomous = new Autonomous();
+    // public AutonomousTestDrive autonomousTestDrive = new AutonomousTestDrive();
+    // public AutonomousTravel autonomous;
+    public AutonomousTurnTest autonomous;
 
     public AI() {
         this.current_state = States.CONTROLLER;
         this.controller_state = new Controller();
         this.main_command = new Command(0, 0);
+        this.autonomous = new AutonomousTurnTest();
     }
 
     public Command getCommand(MainState state) {
@@ -31,6 +34,16 @@ public class AI {
                 break;
         }
         return main_command;
+    }
+
+    public String getFiniteState() {
+        if (this.current_state == States.CONTROLLER) {
+            return "CONTROLLER";
+        } else if (this.current_state == States.AUTONOMOUS) {
+            return "AUTONOMOUS";
+        } else {
+            return "N/A";
+        }
     }
 
     public void setControllerState() {

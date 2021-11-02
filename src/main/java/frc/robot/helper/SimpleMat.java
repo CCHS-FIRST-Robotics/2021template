@@ -48,23 +48,36 @@ public class SimpleMat {
         return a[0] * b[0] + a[1] * b[1];
     }
 
-    public static double angle2Vec(double[] a, double[] b) {
+    public static double vec2theta(double[] a) {
+        double[] unit = unitVec(a);
+        double theta = Math.acos(unit[1]);
+        if (unit[0] > 0) {
+            theta = Math.PI * 2 - theta;
+        }
+        return theta;
+    }
+
+    public static double vecsAngle(double[] a, double[] b) {
         double cos_val = dot(a, b) / (mag(a) * mag(b));
         double diff = Math.acos(cos_val);
         // determine if its left rot or right by calculating global vert theta
-        double a_theta = Math.acos(unitVec(a)[1]);
-        double b_theta = Math.acos(unitVec(b)[1]);
+        double a_theta = vec2theta(a);
+        double b_theta = vec2theta(b);
 
         double left_turn = b_theta - a_theta;
         double right_turn = 2 * Math.PI - left_turn;
         double turn;
-        if (left_turn < right_turn){
+        if (left_turn < right_turn) {
             turn = diff;
-        }
-        else{
+        } else {
             turn = diff * -1;
         }
 
         return turn;
+    }
+
+    public static double vectorDistance(double[] a, double[] b) {
+        double[] new_vec = { a[0] - b[0], a[1] - b[1] };
+        return mag(new_vec);
     }
 }

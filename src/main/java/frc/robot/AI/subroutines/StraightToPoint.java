@@ -1,27 +1,50 @@
 package frc.robot.ai.subroutines;
 
 import frc.robot.state.MainState;
+import frc.robot.Constants;
+import frc.robot.ai.subroutines.exit_methods.ExitMethods;
 import frc.robot.commands.Command;
 import frc.robot.helper.SimpleMat;
+import frc.robot.helper.PID;
 import java.lang.Math;
 
 public class StraightToPoint {
     double[] final_pos = { 0, 0 };
-    double startTimeSec = 0;
+    double start_time_sec = 0;
     double travelDistance = 0;
+    double end_time = 3;
     int updates = 0;
-    
+    PID turn_pid;
+    PID forward_pid;
+    Command main_command;
 
     public StraightToPoint(double target_x, double target_y) {
         this.final_pos[0] = target_x;
         this.final_pos[1] = target_y;
+        this.turn_pid = new PID(0.5, 0, 0);
+        this.forward_pid = new PID(0.2, 0, 0);
+        this.main_command = new Command(0, 0);
+    }
+
+    public boolean exit(MainState main_state) {
+        double ctime = (double) System.currentTimeMillis() / 1000;
+        if ((ctime - this.start_time_sec) > this.start_time_sec) {
+            return true;
+        }
+        double t_dist = SimpleMat.vectorDistance(this.final_pos, main_state.getPosVal());
+        if (t_dist < Constants.ACCEPTABLE_DIST_ERROR) {
+            return true;
+        }
+        return false;
+    }
+
+    public void initExit(MainState main_state) {
+        double t_dist = SimpleMat.vectorDistance(this.final_pos, main_state.getPosVal());
+        this.start_time_sec = System.currentTimeMillis() / 1000; // Start "timer" here
+        this.end_time = ExitMethods.targetTime(t_dist);
     }
 
     public Command update(MainState main_state) {
-        if (updates == 0) {
-            this.startTimeSec = System.currentTimeMillis() / 1000; // Start "timer" here
-            this.travelDistance = distanceToEnd(main_state); // Distance to travel overall
-        }
         // Compute the forward back vector factor
         double[] pos = main_state.getPosVal();
         double[] point_vec = { this.final_pos[0] - pos[0], this.final_pos[1] - pos[1] };
@@ -31,41 +54,38 @@ public class StraightToPoint {
 
         double fwd_mag_fac = SimpleMat.dot(point_vec, unit_h_vec);
 
+        double t_dist = SimpleMat.vectorDistance(this.final_pos, pos);
+
+        boolean orient = true;
+        if (t_dist < Constants.NO_ORIENT_DIST) {
+            orient = false;
+        }
+        double turn_angle = turnAngle(unit_h_vec, point_vec, orient);
+
+        double fwd_response = forward_pid.update(t_dist * fwd_mag_fac);
+        double turn_response = turn_pid.update(turn_angle);
+
+        this.main_command.diffDrive(fwd_response, turn_response);
+
+        if (updates == 0) {
+            initExit(main_state);
+        }
+
         this.updates++;
-        return new Command(0, 0);
+        return this.main_command;
     }
 
-    public double timeSinceStart() {
-        long currentTimeSec = System.currentTimeMillis() / 1000;
-        double difference = currentTimeSec - this.startTimeSec;
-        double timeDifClean = Double.parseDouble(String.format("%.2g%n", difference)); // Time in seconds to hundreths
-        return timeDifClean;
-    }
-
-    public double distanceToEnd(MainState main_state) {
-        double[] pos = main_state.getPosVal();
-        if (this.final_pos[0] - pos[0] < 0 || this.final_pos[1] - pos[1] < 0) {
-            return 0.0;
+    public double turnAngle(double[] h_vec, double[] point_vec, boolean orient) {
+        double orient_angle = SimpleMat.vecsAngle(h_vec, point_vec);
+        if (orient) {
+            return orient_angle;
         }
-        double distance = Math.sqrt(Math.pow((this.final_pos[0] - pos[0]), 2) + Math.pow((this.final_pos[1] - pos[1]), 2));
-        double disClean = Double.parseDouble(String.format("%.2g%n", distance)); // Rounded to hundreths
-        return disClean;
-    }
-
-    public boolean timeExit(MainState main_state) {
-        // if (timeSinceStart() * [rps * wheelcircumfrence] == traveldistance) { return true }
-        return false;
-    }
-
-    public boolean distanceExit(MainState main_state) {
-        if (distanceToEnd(main_state) == 0) { 
-            return true;
+        double[] opposing_h_vec = { h_vec[0] * -1, h_vec[1] * -1 };
+        double opposing_angle = SimpleMat.vecsAngle(opposing_h_vec, point_vec);
+        if (Math.abs(opposing_angle) < Math.abs(orient_angle)) {
+            return opposing_angle;
+        } else {
+            return orient_angle;
         }
-        return false;
-    }
-
-    public boolean weightedEnd() { // VERY ROUGH
-        // if ((timeSinceStart() * [rps * wheelcircumfrence] / traveldistance) * 10 + ((this.traveldistance - distanceToEnd) / (this.traveldistance / 10)) * 10 >= 20 ) {return true}
-        return false;
     }
 }
