@@ -64,13 +64,13 @@ public class SimpleMat {
         double a_theta = vec2theta(a);
         double b_theta = vec2theta(b);
 
-        double left_turn = b_theta - a_theta;
-        double right_turn = 2 * Math.PI - left_turn;
-        double turn;
-        if (left_turn < right_turn) {
-            turn = diff;
+        double turn = b_theta - a_theta;
+
+        double way1 = Math.abs(turn);
+        double way2 = 2 * Math.PI - way1;
+        if (way1 < way2) {
         } else {
-            turn = diff * -1;
+            turn = turn * -1;
         }
 
         return turn;
