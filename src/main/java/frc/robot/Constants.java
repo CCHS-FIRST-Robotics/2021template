@@ -104,11 +104,15 @@ public final class Constants {
     public static final double NO_ORIENT_DIST = 0.5;
 
     public static final double TIMER_START = 1;
-    public static final double TIMER_LEEWAY = 1.3;
+    public static final double TIMER_LEEWAY = 1.7;
 
     public static final double ACCEPTABLE_DIST_ERROR = 0.03;
 
     public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
 
     public static final double TURN_RATE = 2; // seconds per radian
+
+    public static final double TURN_TIME_FAC = 0.4;
+    public static final double MIN_R_FAC = 0.4;
+
 }

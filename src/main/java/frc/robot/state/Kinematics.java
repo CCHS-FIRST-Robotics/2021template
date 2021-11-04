@@ -57,7 +57,7 @@ public class Kinematics {
             this.vel[1] = this.vel[1] + (this.acc[1] + friction_a[1]) * dt;
             // HEADING
             double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
-            double ang_fric = (this.ang_acc / (Math.abs(this.ang_acc) + 0.001)) * Constants.ROBOT_WIDTH
+            double ang_fric = (this.ang_vel / (Math.abs(this.ang_vel) + 0.001)) * Constants.ROBOT_WIDTH
                     * Constants.GRAV_ACC * friction / (2 * m_o_i);
 
             this.heading = this.heading + this.ang_vel * dt + 0.5 * (this.ang_acc + ang_fric) * dt * dt;
