@@ -83,7 +83,7 @@ public final class Constants {
 
     public static final double MOTOR_MAX_TORQUE = 40.247;
 
-    public static final double MOTOR_MAX_RPM = 65.117;
+    public static final double MOTOR_MAX_RPM = 180;
 
     public static final double MOTOR_PROP_VAR = 0.1;
 
@@ -103,11 +103,12 @@ public final class Constants {
     // ==================
     public static final double NO_ORIENT_DIST = 0.5;
 
+    public static final double TIMER_START = 1;
     public static final double TIMER_LEEWAY = 1.3;
 
-    public static final double ACCEPTABLE_DIST_ERROR = 0.3;
+    public static final double ACCEPTABLE_DIST_ERROR = 0.03;
 
     public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
 
-    public static final double TURN_RATE = 2;
+    public static final double TURN_RATE = 2; // seconds per radian
 }

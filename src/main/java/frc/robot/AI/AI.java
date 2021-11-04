@@ -15,13 +15,13 @@ public class AI {
     public Command main_command = new Command(0, 0);
     // public AutonomousTestDrive autonomousTestDrive = new AutonomousTestDrive();
     // public AutonomousTravel autonomous;
-    public AutonomousTurnTest autonomous;
+    public AutonomousTravel autonomous;
 
     public AI() {
         this.current_state = States.CONTROLLER;
         this.controller_state = new Controller();
         this.main_command = new Command(0, 0);
-        this.autonomous = new AutonomousTurnTest();
+        this.autonomous = new AutonomousTravel();
     }
 
     public Command getCommand(MainState state) {

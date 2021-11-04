@@ -7,7 +7,7 @@ import frc.robot.state.MainState;
 import frc.robot.helper.SimpleMat;
 
 public class TurnToPoint {
-    double target_pos[];
+    double target_pos[] = { 0, 0 };
     PID turn_pid;
     Command main_command;
     double end_time = 3;
@@ -16,7 +16,7 @@ public class TurnToPoint {
     public TurnToPoint(double target_x, double target_y) {
         this.target_pos[0] = target_x;
         this.target_pos[1] = target_y;
-        this.turn_pid = new PID(0.5, 0, 0);
+        this.turn_pid = new PID(0.1, 0.001, 0);
         this.main_command = new Command(0, 0);
     }
 
@@ -26,7 +26,7 @@ public class TurnToPoint {
             return true;
         }
         double ctime = (double) System.currentTimeMillis() / 1000;
-        if (ctime - this.start_time_sec > this.end_time) {
+        if ((ctime - this.start_time_sec) > this.end_time) {
             return true;
         }
         return false;
@@ -49,7 +49,7 @@ public class TurnToPoint {
     }
 
     public Command update(MainState main_state) {
-        this.main_command.diffDrive(0, getTheta(main_state));
+        this.main_command.diffDrive(0, this.turn_pid.update(getTheta(main_state)));
         return this.main_command;
     }
 }

@@ -17,18 +17,19 @@ public class StraightToPoint {
     PID turn_pid;
     PID forward_pid;
     Command main_command;
+    double max_dist;
 
     public StraightToPoint(double target_x, double target_y) {
         this.final_pos[0] = target_x;
         this.final_pos[1] = target_y;
-        this.turn_pid = new PID(0.5, 0, 0);
-        this.forward_pid = new PID(0.2, 0, 0);
+        this.turn_pid = new PID(0.05, 0.0001, 0);
+        this.forward_pid = new PID(0.2, 0.015, 0);
         this.main_command = new Command(0, 0);
     }
 
     public boolean exit(MainState main_state) {
         double ctime = (double) System.currentTimeMillis() / 1000;
-        if ((ctime - this.start_time_sec) > this.start_time_sec) {
+        if ((ctime - this.start_time_sec) > this.end_time) {
             return true;
         }
         double t_dist = SimpleMat.vectorDistance(this.final_pos, main_state.getPosVal());
@@ -42,6 +43,7 @@ public class StraightToPoint {
         double t_dist = SimpleMat.vectorDistance(this.final_pos, main_state.getPosVal());
         this.start_time_sec = System.currentTimeMillis() / 1000; // Start "timer" here
         this.end_time = ExitMethods.targetTime(t_dist);
+        this.max_dist = t_dist;
     }
 
     public Command update(MainState main_state) {
@@ -63,7 +65,7 @@ public class StraightToPoint {
         double turn_angle = turnAngle(unit_h_vec, point_vec, orient);
 
         double fwd_response = forward_pid.update(t_dist * fwd_mag_fac);
-        double turn_response = turn_pid.update(turn_angle);
+        double turn_response = turn_pid.update(turn_angle) * (t_dist / this.max_dist);
 
         this.main_command.diffDrive(fwd_response, turn_response);
 

@@ -19,7 +19,7 @@ public class ExitMethods {
     }
 
     public static double targetTime(double travel_distance) {
-        return travel_distance * Constants.TIMER_LEEWAY
+        return Constants.TIMER_START + travel_distance * Constants.TIMER_LEEWAY
                 / ((Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS);
     }
 

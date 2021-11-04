@@ -14,18 +14,20 @@ public class AutonomousTurnTest {
     public AutonomousTurnTest() {
         this.start_time = (double) System.currentTimeMillis() / 1000;
         this.current_target = 0;
-        cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0], waypoint_cloud[this.current_target][1]);
+        this.cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
+                waypoint_cloud[this.current_target][1]);
     }
 
     public void AutonomousInit() {
         this.current_target = 0;
-        cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0], waypoint_cloud[this.current_target][1]);
+        this.cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
+                waypoint_cloud[this.current_target][1]);
         this.generator_initted = false;
     }
 
     public Command getCommands(MainState main_state) {
         if (!this.generator_initted) {
-            cmd_generator.initExit(main_state);
+            this.cmd_generator.initExit(main_state);
             this.generator_initted = true;
         }
         if (cmd_generator.exit(main_state)) {
@@ -33,9 +35,9 @@ public class AutonomousTurnTest {
             if (this.current_target > this.waypoint_cloud.length - 1) {
                 return new Command(0, 0);
             }
-            cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
+            this.cmd_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
                     waypoint_cloud[this.current_target][1]);
-            cmd_generator.initExit(main_state);
+            this.cmd_generator.initExit(main_state);
         }
         Command output = cmd_generator.update(main_state);
         return output;
