@@ -24,16 +24,7 @@ public class CommandHelper {
         return new Command(left_prop, right_prop);
     }
 
-    public static double wheelForceFactor(double prop, double rel_vel) {
-        double maxms = (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS;
-        double factor = 1 - (rel_vel / maxms);
-        if (factor > 1) {
-            factor = 1;
-        } else if (factor < 0) {
-            factor = 0;
-        }
-        return factor;
-    }
+
 
 
     static double motorController(double target_rpm, double current_rpm) {

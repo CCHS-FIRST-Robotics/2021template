@@ -5,6 +5,17 @@ import frc.robot.Constants;
 import frc.robot.helper.SimpleMat;
 
 public class UpdateState {
+    public static double wheelForceFactor(double prop, double rel_vel) {
+        double maxms = (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS;
+        double factor = 1 - (rel_vel / maxms);
+        if (factor > 1) {
+            factor = 1;
+        } else if (factor < 0) {
+            factor = 0;
+        }
+        return factor;
+    }
+    
     public static double motorForce(MainState state, double pwr_prop) {
         double[] h_vec = SimpleMat.projectHeading(state.getHeadingVal(), 1);
         double rel_vel = SimpleMat.scalarProject(h_vec, state.getVelVal());

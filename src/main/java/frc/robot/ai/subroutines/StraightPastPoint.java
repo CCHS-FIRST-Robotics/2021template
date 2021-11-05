@@ -1,14 +1,11 @@
 package frc.robot.ai.subroutines;
-
+import frc.robot.commands.Command;
+import frc.robot.state.MainState;
+import frc.robot.helper.PID;
+import frc.robot.helper.SimpleMat;
+import frc.robot.Constants;
+import frc.robot.ai.subroutines.exit_methods.ExitMethods;
 public class StraightPastPoint {
-    package frc.robot.ai.subroutines;
-
-    import frc.robot.commands.Command;
-    import frc.robot.state.MainState;
-    import frc.robot.helper.PID;
-    import frc.robot.helper.SimpleMat;
-    import frc.robot.Constants;
-    import frc.robot.ai.subroutines.exit_methods.ExitMethods;
     
     public class StraightPastPoint {
         double[] target = { 0, 0 };
