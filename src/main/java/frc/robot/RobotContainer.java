@@ -9,6 +9,7 @@ import java.util.Calendar;
 import frc.robot.commands.CommandHandler;
 import frc.robot.ai.AI;
 import frc.robot.commands.Command;
+import frc.robot.commands.CommandHelper;
 import frc.robot.state.MainState;
 import frc.robot.commands.UpdateState;
 import frc.robot.sensors.DriveEncoderSensor;
@@ -66,7 +67,7 @@ public class RobotContainer {
   public void mainLoop() {
     this.main_command = this.ai.getCommand(this.main_state);
 
-    UpdateState.updateState(this.main_state, this.main_command);
+    CommandHelper.updateState(this.main_state, this.main_command);
     this.command_handler.scheduleCommands(this.main_command, this.hardware);
 
     if (this.drive_encoder_sensor.shouldUse()) {

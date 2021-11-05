@@ -5,8 +5,7 @@ import frc.robot.helper.PID;
 import frc.robot.helper.SimpleMat;
 import frc.robot.Constants;
 import frc.robot.ai.subroutines.exit_methods.ExitMethods;
-public class StraightPastPoint {
-    
+
     public class StraightPastPoint {
         double[] target = { 0, 0 };
         double start_time_sec;
