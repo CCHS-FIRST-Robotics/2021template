@@ -16,7 +16,7 @@ public class StraightToPoint2 {
     double start_r;
 
     public StraightToPoint2(double target_x, double target_y) {
-        this.forward_pid = new PID(0.2, 0.0, 0); // must be k_i = 0
+        this.forward_pid = new PID(0.4, 0.0, 0); // must be k_i = 0
         this.target[0] = target_x;
         this.target[1] = target_y;
     }
@@ -58,7 +58,10 @@ public class StraightToPoint2 {
         r = r * rScalar();
         double[] prop_command = { r + Constants.ROBOT_WIDTH / 2, r - Constants.ROBOT_WIDTH / 2 };
         double max_prop_mag = Math.max(Math.abs(prop_command[0]), Math.abs(prop_command[1]));
-
+        if (max_prop_mag == -1 * Math.min(prop_command[0], prop_command[1])) {
+            prop_command[0] = prop_command[0] * -1;
+            prop_command[1] = prop_command[1] * -1;
+        }
         double pwr = Math.max(Math.min(this.forward_pid.update(t_dist), 1), -1);
         double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
 

@@ -76,6 +76,19 @@ public class SimpleMat {
         return turn;
     }
 
+    public static double vecsAngle2(double[] heading, double[] y_p) {
+        double turn_mag = Math.acos(dot(heading, y_p) / (mag(heading) * mag(y_p)));
+        double[] new_head = { -1 * heading[1], heading[0] };
+        double side = dot(new_head, y_p);
+        double turn;
+        if (side > 0) {
+            turn = turn_mag;
+        } else {
+            turn = turn_mag * -1;
+        }
+        return turn;
+    }
+
     public static double vectorDistance(double[] a, double[] b) {
         double[] new_vec = { a[0] - b[0], a[1] - b[1] };
         return mag(new_vec);
