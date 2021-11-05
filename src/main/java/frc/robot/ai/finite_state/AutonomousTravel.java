@@ -6,9 +6,9 @@ import frc.robot.ai.subroutines.*;
 
 public class AutonomousTravel {
     double start_time = 0;
-    double[][] waypoint_cloud = { { 0, 2 }, { 2, 2 }, { 0, 0 } };
+    double[][] waypoint_cloud = { { 0, 3 }, { 0, 1.5 }, { 0, 0 } };
     int current_target = 0;
-    StraightToPoint cmd_generator;
+    StraightToPoint2 cmd_generator;
     TurnToPoint turn_generator;
     boolean generator_initted = false;
     boolean turn_state = true;
@@ -19,7 +19,7 @@ public class AutonomousTravel {
 
         this.turn_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
                 waypoint_cloud[this.current_target][1]);
-        this.cmd_generator = new StraightToPoint(waypoint_cloud[this.current_target][0],
+        this.cmd_generator = new StraightToPoint2(waypoint_cloud[this.current_target][0],
                 waypoint_cloud[this.current_target][1]);
     }
 
@@ -27,7 +27,7 @@ public class AutonomousTravel {
         this.current_target = 0;
         this.turn_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
                 waypoint_cloud[this.current_target][1]);
-        this.cmd_generator = new StraightToPoint(waypoint_cloud[this.current_target][0],
+        this.cmd_generator = new StraightToPoint2(waypoint_cloud[this.current_target][0],
                 waypoint_cloud[this.current_target][1]);
         this.generator_initted = false;
     }
@@ -56,7 +56,7 @@ public class AutonomousTravel {
                 }
                 this.turn_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
                         waypoint_cloud[this.current_target][1]);
-                this.cmd_generator = new StraightToPoint(waypoint_cloud[this.current_target][0],
+                this.cmd_generator = new StraightToPoint2(waypoint_cloud[this.current_target][0],
                         waypoint_cloud[this.current_target][1]);
                 this.turn_generator.initExit(main_state);
             }

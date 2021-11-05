@@ -5,12 +5,19 @@ import frc.robot.Constants;
 import frc.robot.helper.SimpleMat;
 
 public class UpdateState {
+    public static double motorForce(MainState state, double pwr_prop) {
+        double[] h_vec = SimpleMat.projectHeading(state.getHeadingVal(), 1);
+        double rel_vel = SimpleMat.scalarProject(h_vec, state.getVelVal());
+
+        double f = pwr_prop * Constants.MOTOR_MAX_TORQUE * wheelForceFactor(pwr_prop, rel_vel) / Constants.WHEEL_RADIUS;
+        return f;
+    }
     public static void updateState(MainState state, Command command) {
         // Accel + Ang Vel
         double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
 
-        double left_f = CommandHelper.motorForce(state, command.left_pwr_prop);
-        double right_f = CommandHelper.motorForce(state, command.right_pwr_prop);
+        double left_f = motorForce(state, command.left_pwr_prop);
+        double right_f = motorForce(state, command.right_pwr_prop);
 
         double torque = (right_f - left_f) * Constants.ROBOT_WIDTH * 0.5;
         double forward_f = (right_f + left_f);

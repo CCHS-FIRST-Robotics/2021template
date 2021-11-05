@@ -35,13 +35,6 @@ public class CommandHelper {
         return factor;
     }
 
-    public static double motorForce(MainState state, double pwr_prop) {
-        double[] h_vec = SimpleMat.projectHeading(state.getHeadingVal(), 1);
-        double rel_vel = SimpleMat.scalarProject(h_vec, state.getVelVal());
-
-        double f = pwr_prop * Constants.MOTOR_MAX_TORQUE * wheelForceFactor(pwr_prop, rel_vel) / Constants.WHEEL_RADIUS;
-        return f;
-    }
 
     static double motorController(double target_rpm, double current_rpm) {
         double vtnew = target_rpm * Constants.WHEEL_RADIUS * Constants.INIT_R_WHL_TRAC;

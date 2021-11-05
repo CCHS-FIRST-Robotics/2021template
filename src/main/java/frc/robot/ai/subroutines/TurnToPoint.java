@@ -33,8 +33,10 @@ public class TurnToPoint {
     }
 
     public void initExit(MainState main_state) {
+        double max_ang_vel = (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS
+        * Constants.INIT_L_WHL_TRAC / (Constants.ROBOT_WIDTH / 2);
         this.start_time_sec = (double) System.currentTimeMillis() / 1000; // Start "timer" here
-        this.end_time = Math.abs(getTheta(main_state)) * Constants.TURN_RATE;
+        this.end_time = Math.abs(getTheta(main_state)) * Constants.TURN_LEEWAY / max_ang_vel;
     }
 
     public double getTheta(MainState main_state) {
@@ -43,7 +45,7 @@ public class TurnToPoint {
 
         point_vec = SimpleMat.unitVec(point_vec);
         double[] unit_h_vec = SimpleMat.projectHeading(main_state.getHeadingVal(), 1);
-        double pwr_cmd = SimpleMat.vecsAngle(unit_h_vec, point_vec);
+        double pwr_cmd = SimpleMat.vecsAngle2(unit_h_vec, point_vec);
 
         return pwr_cmd;
     }

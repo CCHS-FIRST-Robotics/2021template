@@ -110,9 +110,10 @@ public final class Constants {
 
     public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
 
-    public static final double TURN_RATE = 2; // seconds per radian
+    public static final double TURN_LEEWAY = 3;
 
     public static final double TURN_TIME_FAC = 0.4;
+    public static final double TURN_TIME_MAX = 2;
     public static final double MIN_R_FAC = 0.4;
 
 }
