@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.helper.Logging;
+import java.io.File;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
    */
   private RobotContainer robotContainer;
   Logging log = new Logging();
+  File myObj;
 
   public void loggingConfigure(RobotContainer rContainer) {
     double[] accv = rContainer.imu_sensor.log_acc;
@@ -38,9 +40,17 @@ public class Robot extends TimedRobot {
         rContainer.main_state.getPosVal()[0], rContainer.main_state.getPosVal()[1] };
     log.printInfo(name, value);
     System.out.println("Current State : " + rContainer.ai.getFiniteState());
+
+    if (myObj.exists()) {
+      System.out.println("File name: " + myObj.getName());
+      System.out.println("Absolute path: " + myObj.getAbsolutePath());
+    } else {
+      System.out.println("The file does not exist.");
+    }
   }
 
   public Robot() {
+    this.myObj = new File("ai/autonomous_commands/auton1.txt");
     this.robotContainer = new RobotContainer();
     addPeriodic(() -> {
       this.robotContainer.mainLoop();

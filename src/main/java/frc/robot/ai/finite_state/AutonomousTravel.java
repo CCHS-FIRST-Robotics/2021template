@@ -6,7 +6,7 @@ import frc.robot.ai.subroutines.*;
 
 public class AutonomousTravel {
     double start_time = 0;
-    double[][] waypoint_cloud = { { 0, 3 }, { 0, 1.5 }, { 0, 0 } };
+    double[][] waypoint_cloud = { { 0, 1 } };
     int current_target = 0;
     StraightToPoint2 cmd_generator;
     TurnToPoint turn_generator;

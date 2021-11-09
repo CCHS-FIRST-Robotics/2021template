@@ -67,7 +67,7 @@ public class StraightToPoint2 {
             prop_command[0] = prop_command[0] * -1;
             prop_command[1] = prop_command[1] * -1;
         }
-        double pwr = Math.max(Math.min(this.forward_pid.update(t_dist), 1), -1);
+        double pwr = Math.max(Math.min(this.forward_pid.update(t_dist), 1), 0.05);
         double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
 
         Command output = new Command(t_cmd[0], t_cmd[1]);
