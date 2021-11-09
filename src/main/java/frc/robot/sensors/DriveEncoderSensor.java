@@ -48,10 +48,10 @@ public class DriveEncoderSensor extends BaseSensor {
     }
 
     public void localDisplacement(double l_radss, double r_radss, double dt) {
-        double l = l_radss * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
-        double r = r_radss * Constants.WHEEL_RADIUS * Constants.INIT_R_WHL_TRAC;
+        double l = dt * l_radss * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
+        double r = dt * r_radss * Constants.WHEEL_RADIUS * Constants.INIT_R_WHL_TRAC;
 
-        this.arc_angle = dt * (r - l) / Constants.ROBOT_WIDTH;
+        this.arc_angle = (r - l) / Constants.ROBOT_WIDTH;
 
         if (r == l) {
             this.o_local_delta[0] = 0;
