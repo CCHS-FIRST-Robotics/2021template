@@ -23,6 +23,10 @@ public class ExitMethods {
                 / ((Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS);
     }
 
+    public static double initScoreCoeff(double max_time) {
+        return max_time * Constants.ACCEPTABLE_DIST_ERROR;
+    }
+
     public static boolean fusionExit(double vel_mag, double t_dist) {
         double min_vel_mag = 0.1 * ((Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS);
         double a_vel = Math.max(vel_mag, min_vel_mag);

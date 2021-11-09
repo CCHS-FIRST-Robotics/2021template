@@ -104,7 +104,7 @@ public final class Constants {
     public static final double NO_ORIENT_DIST = 0.5;
 
     public static final double TIMER_START = 1;
-    public static final double TIMER_LEEWAY = 1.7;
+    public static final double TIMER_LEEWAY = 8;
 
     public static final double ACCEPTABLE_DIST_ERROR = 0.03;
 

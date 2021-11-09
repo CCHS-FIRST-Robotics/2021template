@@ -14,6 +14,7 @@ public class StraightToPoint2 {
     double end_time;
     double max_dist;
     double start_r;
+    double score_coeff;
 
     public StraightToPoint2(double target_x, double target_y) {
         this.forward_pid = new PID(0.2, 0.0, 0); // must be k_i = 0
@@ -23,10 +24,11 @@ public class StraightToPoint2 {
 
     public boolean exit(MainState main_state) {
         double ctime = (double) System.currentTimeMillis() / 1000;
-        if ((ctime - this.start_time_sec) > this.end_time) {
+        double t_dist = SimpleMat.vectorDistance(this.target, main_state.getPosVal());
+        double score = (ctime - this.start_time_sec) + score_coeff / t_dist;
+        if (score > this.end_time) {
             return true;
         }
-        double t_dist = SimpleMat.vectorDistance(this.target, main_state.getPosVal());
         if (t_dist < Constants.ACCEPTABLE_DIST_ERROR) {
             return true;
         }
@@ -39,6 +41,7 @@ public class StraightToPoint2 {
         this.start_time_sec = System.currentTimeMillis() / 1000; // Start "timer" here
         this.end_time = ExitMethods.targetTime(t_dist);
         this.max_dist = t_dist;
+        this.score_coeff = ExitMethods.initScoreCoeff(t_dist);
     }
 
     double rScalar() {
