@@ -18,7 +18,7 @@ public class IMUSensor extends BaseSensor {
     public double log_yaw_vel;
 
     double x_acc_zero = 0;
-    double[] yz_acc_zero = { 0, 9.81 };
+    double[] xyz_acc_zero = { 0, 0, 9.81 };
     double yz_mag_zero = 9.81;
 
     public IMUSensor(double sync_time) {
@@ -46,12 +46,26 @@ public class IMUSensor extends BaseSensor {
         double z_acc = (double) xyz_acc[2] * -9.81 / 16384;
 
         this.x_acc_zero = x_acc;
-        this.yz_acc_zero[0] = y_acc;
-        this.yz_acc_zero[1] = z_acc;
+        this.xyz_acc_zero[0] = x_acc;
+        this.xyz_acc_zero[1] = y_acc;
+        this.xyz_acc_zero[2] = z_acc;
 
-        this.yz_mag_zero = SimpleMat.mag(this.yz_acc_zero);
+        this.yz_mag_zero = SimpleMat.mag(this.xyz_acc_zero) - 9.8;
 
         hardware.IMU.setFusedHeading(0);
+    }
+
+    double[] projectAcc(MainState state, double[] xy_acc) {
+        double xy_mag = SimpleMat.mag(xy_acc);
+        double[] acc = { 0, 0 };
+        if (xy_mag < this.yz_mag_zero) {
+            return acc;
+        }
+        double[] h_unit = SimpleMat.projectHeading(state.getHeadingVal(), 1);
+        double[] projected_acc = SimpleMat.scaleVec(h_unit, SimpleMat.dot(h_unit, xy_acc));
+        acc[0] = 0.5 * projected_acc[0] + 0.5 * xy_acc[0];
+        acc[1] = 0.5 * projected_acc[1] + 0.5 * xy_acc[1];
+        return acc;
     }
 
     public void processValue(MainState state, HardwareObjects hardware) {
@@ -68,16 +82,18 @@ public class IMUSensor extends BaseSensor {
         hardware.IMU.getYawPitchRoll(ypr_deg);
         // 16384 = 1g
 
+        double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
+
         double x_acc = (double) xyz_acc[0] * -9.81 / 16384;
         x_acc = x_acc - x_acc_zero;
 
-        double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
         double yt_acc = (double) xyz_acc[1] * -9.81 / 16384;
         double zt_acc = (double) xyz_acc[2] * -9.81 / 16384;
-        double y_acc = yt_acc * Math.cos(r_pitch) - zt_acc * Math.sin(r_pitch);
+        double y_acc = yt_acc * Math.cos(r_pitch) + zt_acc * Math.sin(r_pitch);
 
-        double[] acc_l_vec = { x_acc, y_acc };
-        double[] global_acc = SimpleMat.rot2d(acc_l_vec, state.getHeadingVal());
+        double[] xy_acc = { x_acc, y_acc };
+        xy_acc = SimpleMat.rot2d(xy_acc, state.getHeadingVal());
+        double[] global_acc = projectAcc(state, xy_acc);
 
         this.log_acc[0] = x_acc;
         this.log_acc[1] = y_acc;
@@ -107,7 +123,7 @@ public class IMUSensor extends BaseSensor {
                 Constants.IMU_ACC_VAR);
 
         double[] new_acc = { kxacc[0], kyacc[1] };
-        // state.setAcc(new_acc, kxacc[1]);
+        state.setAcc(new_acc, kxacc[1]);
 
         updateHeadingVar();
     }

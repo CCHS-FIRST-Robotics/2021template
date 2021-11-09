@@ -70,7 +70,7 @@ public final class Constants {
     public static final double DELTA_VAR = 0.0001;
     public static final double MAX_HEADING_VAR = 0.3 * 0.3;
 
-    public static final double IMU_ACC_VAR = 1.0 * 1.0;
+    public static final double IMU_ACC_VAR = 4;
     // ==================
     // TIME CONSTANTS
     // ==================
