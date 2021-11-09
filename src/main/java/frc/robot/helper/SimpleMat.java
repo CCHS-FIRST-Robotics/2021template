@@ -77,7 +77,7 @@ public class SimpleMat {
     }
 
     public static double vecsAngle2(double[] heading, double[] y_p) {
-        double turn_mag = Math.acos(dot(heading, y_p) / (mag(heading) * mag(y_p)));
+        double turn_mag = Math.acos(dot(heading, y_p) / (mag(heading) * mag(y_p) + 0.001));
         double[] new_head = { -1 * heading[1], heading[0] };
         double side = dot(new_head, y_p);
         double turn;

@@ -16,7 +16,7 @@ public class StraightToPoint2 {
     double start_r;
 
     public StraightToPoint2(double target_x, double target_y) {
-        this.forward_pid = new PID(0.4, 0.0, 0); // must be k_i = 0
+        this.forward_pid = new PID(0.2, 0.0, 0); // must be k_i = 0
         this.target[0] = target_x;
         this.target[1] = target_y;
     }
@@ -30,7 +30,8 @@ public class StraightToPoint2 {
         if (t_dist < Constants.ACCEPTABLE_DIST_ERROR) {
             return true;
         }
-        return false;
+        double vel_mag = SimpleMat.mag(main_state.getVelVal());
+        return ExitMethods.fusionExit(vel_mag, t_dist);
     }
 
     public void initExit(MainState main_state) {
@@ -42,7 +43,7 @@ public class StraightToPoint2 {
 
     double rScalar() {
         double c_time = (double) System.currentTimeMillis() / 1000;
-        double turn_max_t = Math.min(Constants.TURN_TIME_MAX,Constants.TURN_TIME_FAC * this.end_time);
+        double turn_max_t = Math.min(Constants.TURN_TIME_MAX, Constants.TURN_TIME_FAC * this.end_time);
         double prop_comp = (c_time - this.start_time_sec) * (1 - Constants.MIN_R_FAC)
                 / (Constants.TURN_TIME_FAC * this.end_time);
         double output = Math.min(prop_comp + Constants.MIN_R_FAC, 1);

@@ -23,6 +23,16 @@ public class ExitMethods {
                 / ((Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS);
     }
 
+    public static boolean fusionExit(double vel_mag, double t_dist) {
+        double min_vel_mag = 0.1 * ((Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS);
+        double a_vel = Math.max(vel_mag, min_vel_mag);
+        double n_coeff = Constants.ACCEPTABLE_DIST_ERROR * Constants.ACCEPTABLE_DIST_ERROR / a_vel;
+        if (t_dist / a_vel < n_coeff / t_dist) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean timeExit(MainState main_state) {
         // if (timeSinceStart() * [rps * wheelcircumfrence] == traveldistance) { return
         // true }

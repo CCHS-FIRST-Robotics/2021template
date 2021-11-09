@@ -81,7 +81,7 @@ public class DriveEncoderSensor extends BaseSensor {
 
         double[] pred_pos = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
 
-        double new_heading = this.heading + SimpleMat.angleRectifier(this.arc_angle);
+        double new_heading = this.heading + this.arc_angle;
 
         // compute variances
         double dist_coeff = (Math.abs(l_radss) + Math.abs(r_radss)) * Constants.MAIN_DT / (2 * Math.PI);

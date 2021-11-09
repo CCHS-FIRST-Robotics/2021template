@@ -42,7 +42,7 @@ public class AutonomousTravel {
         if (this.turn_state) {
             if (this.turn_generator.exit(main_state)) {
                 this.turn_state = false;
-                this.cmd_generator = new StraightToPoint(waypoint_cloud[this.current_target][0],
+                this.cmd_generator = new StraightToPoint2(waypoint_cloud[this.current_target][0],
                         waypoint_cloud[this.current_target][1]);
                 this.cmd_generator.initExit(main_state);
             }

@@ -16,7 +16,7 @@ public class TurnToPoint {
     public TurnToPoint(double target_x, double target_y) {
         this.target_pos[0] = target_x;
         this.target_pos[1] = target_y;
-        this.turn_pid = new PID(0.1, 0.001, 0);
+        this.turn_pid = new PID(0.05, 0.001, 0);
         this.main_command = new Command(0, 0);
     }
 
@@ -34,7 +34,7 @@ public class TurnToPoint {
 
     public void initExit(MainState main_state) {
         double max_ang_vel = (Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60) * Constants.WHEEL_RADIUS
-        * Constants.INIT_L_WHL_TRAC / (Constants.ROBOT_WIDTH / 2);
+                * Constants.INIT_L_WHL_TRAC / (Constants.ROBOT_WIDTH / 2);
         this.start_time_sec = (double) System.currentTimeMillis() / 1000; // Start "timer" here
         this.end_time = Math.abs(getTheta(main_state)) * Constants.TURN_LEEWAY / max_ang_vel;
     }
