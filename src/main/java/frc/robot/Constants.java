@@ -116,4 +116,9 @@ public final class Constants {
     public static final double TURN_TIME_MAX = 2;
     public static final double MIN_R_FAC = 0.4;
 
+    // ==================
+    // LIMELIGHT
+    // ==================
+
+    public static final double LIME_LIGHT_ANGLE = 45;
 }
