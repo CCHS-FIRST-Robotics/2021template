@@ -108,7 +108,11 @@ public final class Constants {
 
     public static final double ACCEPTABLE_DIST_ERROR = 0.03;
 
+    public static final double ACCEPTABLE_DIST_SOFT = 0.4;
+
     public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
+
+    public static final double EXIT_THETA = 1.2217;
 
     public static final double TURN_LEEWAY = 6;
 

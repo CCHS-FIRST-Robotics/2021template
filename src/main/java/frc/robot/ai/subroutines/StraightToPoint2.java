@@ -33,7 +33,13 @@ public class StraightToPoint2 {
             return true;
         }
         double vel_mag = SimpleMat.mag(main_state.getVelVal());
-        return ExitMethods.fusionExit(vel_mag, t_dist);
+        if (ExitMethods.fusionExit(vel_mag, t_dist)) {
+            return true;
+        }
+        if (ExitMethods.thetaExit(main_state, this.target) && t_dist < Constants.ACCEPTABLE_DIST_SOFT) {
+            return true;
+        }
+        return false;
     }
 
     public void initExit(MainState main_state) {

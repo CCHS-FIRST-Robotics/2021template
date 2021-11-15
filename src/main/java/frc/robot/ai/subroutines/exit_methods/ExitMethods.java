@@ -1,6 +1,7 @@
 package frc.robot.ai.subroutines.exit_methods;
 
 import frc.robot.Constants;
+import frc.robot.helper.SimpleMat;
 import frc.robot.state.MainState;
 
 public class ExitMethods {
@@ -35,6 +36,13 @@ public class ExitMethods {
             return true;
         }
         return false;
+    }
+
+    public static boolean thetaExit(MainState state, double[] target) {
+        double[] delta = { target[0] - state.getPosVal()[0], target[1] - state.getPosVal()[1] };
+        double[] heading = SimpleMat.projectHeading(state.getHeadingVal(), 1);
+        double smaller_angle = Math.acos(SimpleMat.dot(delta, heading) / SimpleMat.mag(delta));
+        return (smaller_angle > Constants.EXIT_THETA);
     }
 
     public static boolean timeExit(MainState main_state) {
