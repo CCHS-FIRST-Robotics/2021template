@@ -88,7 +88,7 @@ public class StraightToPoint2 {
 
     double pwrController(MainState state, double dist_mag) {
         double vel = (dist_mag - this.previous_ad) / Constants.MAIN_DT;
-        double max_vel = Constants.MOTOR_MAX_RPM * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
+        double max_vel = 2 * Constants.MOTOR_MAX_RPM * Constants.WHEEL_RADIUS * Math.PI / 60;
         double max_acc = (2 * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
         this.previous_ad = dist_mag;
         double drift_dist = -1 * max_vel * max_vel / (Constants.INIT_FRICTION * Constants.GRAV_ACC);
@@ -114,6 +114,11 @@ public class StraightToPoint2 {
         } else if (np > 0) {
             n = np;
         } else {
+            double pwr = dist_mag * 0.2;
+            this.previous_pwr = pwr;
+            return pwr;
+        }
+        if (n > 2) {
             double pwr = dist_mag * 0.2;
             this.previous_pwr = pwr;
             return pwr;
