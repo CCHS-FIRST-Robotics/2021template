@@ -20,7 +20,7 @@ public class StraightToPoint2 {
     double[] line_norm = { 0, 1 };
 
     public StraightToPoint2(double target_x, double target_y) {
-        this.forward_pid = new PID(0.2, 0.0, 0); // must be k_i = 0
+        this.forward_pid = new PID(0.1, 0.001, 0.1); // must be k_i = 0
         this.target[0] = target_x;
         this.target[1] = target_y;
         this.previous_pwr = 0;
@@ -52,6 +52,7 @@ public class StraightToPoint2 {
         this.end_time = ExitMethods.targetTime(t_dist);
         this.max_dist = t_dist;
         this.score_coeff = ExitMethods.initScoreCoeff(t_dist);
+        this.previous_ad = t_dist;
     }
 
     double arcDistance(MainState state, double r) {
@@ -118,7 +119,7 @@ public class StraightToPoint2 {
             this.previous_pwr = pwr;
             return pwr;
         }
-        if (n > 2) {
+        if (n > 1.8) {
             double pwr = dist_mag * 0.2;
             this.previous_pwr = pwr;
             return pwr;
@@ -154,6 +155,7 @@ public class StraightToPoint2 {
             prop_command[1] = prop_command[1] * -1;
         }
         double pwr = Math.max(Math.min(pwrController(main_state, arc_dist), 1), -1);
+        // double pwr = Math.max(Math.min(this.forward_pid(arc_dist), 1), -1);
         double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
 
         Command output = new Command(t_cmd[0], t_cmd[1]);
