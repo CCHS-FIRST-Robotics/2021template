@@ -10,6 +10,16 @@ public class SimpleMat {
         return prod;
     }
 
+    public static double[] add(double[] a, double[] b) {
+        double[] o = { a[0] + b[0], a[1] + b[1] };
+        return o;
+    }
+
+    public static double[] subtract(double[] a, double[] b) {
+        double[] o = { a[0] - b[0], a[1] - b[1] };
+        return o;
+    }
+
     public static double mag(double[] vec) {
         return Math.pow(vec[0] * vec[0] + vec[1] * vec[1], 0.5);
     }

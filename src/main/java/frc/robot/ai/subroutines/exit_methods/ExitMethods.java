@@ -42,7 +42,7 @@ public class ExitMethods {
         double[] delta = { target[0] - state.getPosVal()[0], target[1] - state.getPosVal()[1] };
         double[] heading = SimpleMat.projectHeading(state.getHeadingVal(), 1);
         double smaller_angle = Math.acos(SimpleMat.dot(delta, heading) / SimpleMat.mag(delta));
-        return (smaller_angle > Constants.EXIT_THETA);
+        return (smaller_angle * 2 > Constants.EXIT_THETA);
     }
 
     public static boolean timeExit(MainState main_state) {
