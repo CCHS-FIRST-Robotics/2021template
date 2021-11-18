@@ -118,6 +118,6 @@ public final class Constants {
 
     public static final double TURN_TIME_FAC = 0.4;
     public static final double TURN_TIME_MAX = 2;
-    public static final double MIN_R_FAC = 0.4;
+    public static final double MIN_R_FAC = 0.8;
 
 }

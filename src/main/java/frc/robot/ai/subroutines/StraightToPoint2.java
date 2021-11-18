@@ -115,7 +115,7 @@ public class StraightToPoint2 {
         double turn_max_t = Math.min(Constants.TURN_TIME_MAX, Constants.TURN_TIME_FAC * this.end_time);
         double prop_comp = (c_time - this.start_time_sec) * (1 - Constants.MIN_R_FAC)
                 / (Constants.TURN_TIME_FAC * this.end_time);
-        double output = Math.min(prop_comp + Constants.MIN_R_FAC, 0.9);
+        double output = Math.min(prop_comp + Constants.MIN_R_FAC, 1);
         return output;
     }
 
