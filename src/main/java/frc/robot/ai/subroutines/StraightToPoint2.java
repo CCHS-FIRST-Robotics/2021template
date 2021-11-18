@@ -95,6 +95,9 @@ public class StraightToPoint2 {
         if (drift_dist < dist_mag) {
             this.previous_pwr = 1;
             return 1;
+        } else if (drift_dist * -1 > dist_mag) {
+            this.previous_pwr = -1;
+            return -1;
         }
         double discriminant = 4 * vel * vel + 6 * max_acc * this.previous_pwr * dist_mag;
         if (discriminant < 0) {
@@ -103,7 +106,18 @@ public class StraightToPoint2 {
             this.previous_pwr = pwr;
             return pwr;
         }
-        double n = -2 * vel + Math.pow(discriminant, 0.5) * (1 / (max_acc * this.previous_pwr));
+        double n = 1;
+        double nm = -2 * vel - Math.pow(discriminant, 0.5) * (1 / (max_acc * this.previous_pwr));
+        double np = -2 * vel + Math.pow(discriminant, 0.5) * (1 / (max_acc * this.previous_pwr));
+        if (nm > 0) {
+            n = nm;
+        } else if (np > 0) {
+            n = np;
+        } else {
+            double pwr = dist_mag * 0.2;
+            this.previous_pwr = pwr;
+            return pwr;
+        }
         double slope = -2 * (vel + (max_acc * this.previous_pwr) * n) / (n * n);
         double pwr = ((max_acc * this.previous_pwr) + slope * Constants.MAIN_DT) / max_acc;
         this.previous_pwr = pwr;
