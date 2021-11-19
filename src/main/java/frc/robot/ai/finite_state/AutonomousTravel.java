@@ -4,6 +4,12 @@ import frc.robot.commands.Command;
 import frc.robot.state.MainState;
 import frc.robot.ai.subroutines.*;
 
+/**
+ * Class that constructs autonomous subroutines with various target points to
+ * make an autonomous travel routine
+ * 
+ * @author Ludwig Tay
+ */
 public class AutonomousTravel {
     double start_time = 0;
     double[][] waypoint_cloud = { { 0, 1 } };
@@ -13,6 +19,9 @@ public class AutonomousTravel {
     boolean generator_initted = false;
     boolean turn_state = true;
 
+    /**
+     * Constructor for autonomous travel
+     */
     public AutonomousTravel() {
         this.start_time = (double) System.currentTimeMillis() / 1000;
         this.current_target = 0;
@@ -23,6 +32,9 @@ public class AutonomousTravel {
                 waypoint_cloud[this.current_target][1]);
     }
 
+    /**
+     * Initializes the autonomous routine by setting the target pointer back to 0
+     */
     public void AutonomousInit() {
         this.current_target = 0;
         this.turn_generator = new TurnToPoint(waypoint_cloud[this.current_target][0],
@@ -32,6 +44,13 @@ public class AutonomousTravel {
         this.generator_initted = false;
     }
 
+    /**
+     * Get commands from current subroutine, additionally check whether exit
+     * condition is met from subroutine to load next target point and subroutine
+     * 
+     * @param main_state
+     * @return command to give hardware object
+     */
     public Command getCommands(MainState main_state) {
         if (!this.generator_initted) {
             this.turn_generator.initExit(main_state);

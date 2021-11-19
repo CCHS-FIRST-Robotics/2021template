@@ -11,6 +11,14 @@ public class Drive {
 
     }
 
+    /**
+     * Takes power proportions for left and right wheels and feeds it into hardware
+     * objects
+     * 
+     * @param left_prop  left motor power proportion from [-1,1]
+     * @param right_prop right motor power proportion from [-1,1]
+     * @param hardware   robot hardware objects
+     */
     public void setDrives(double left_prop, double right_prop, HardwareObjects hardware) {
         hardware.LEFT_MOTOR1.set(ControlMode.PercentOutput, left_prop);
         hardware.LEFT_MOTOR2.set(ControlMode.PercentOutput, left_prop);

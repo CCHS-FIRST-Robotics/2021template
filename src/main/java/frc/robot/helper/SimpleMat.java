@@ -2,7 +2,22 @@ package frc.robot.helper;
 
 import java.lang.Math;
 
+/**
+ * Collection of all common mathematics operations with emphasis on vector math
+ * 
+ * @author Ludwig Tay
+ */
 public class SimpleMat {
+
+    /**
+     * Rotate a vector by theta radians and return resulting rotated vector. Done
+     * using 2x2 rotation matrix
+     * 
+     * @param vec   len 2 array containing {x,y} values that represent vector to be
+     *              rotated
+     * @param theta angle to rotate vector by in radians
+     * @return rotated vector
+     */
     public static double[] rot2d(double[] vec, double theta) {
         double[] prod = { 0, 0 };
         prod[0] = Math.cos(theta) * vec[0] - Math.sin(theta) * vec[1];
@@ -10,20 +25,46 @@ public class SimpleMat {
         return prod;
     }
 
+    /**
+     * Add 2 vectors a and b.
+     * 
+     * @param a len 2 array containing {x,y} values that represent vector
+     * @param b len 2 array containing {x,y} values that represent vector
+     * @return added vector
+     */
     public static double[] add(double[] a, double[] b) {
         double[] o = { a[0] + b[0], a[1] + b[1] };
         return o;
     }
 
+    /**
+     * Subtract vector b from vector a
+     * 
+     * @param a len 2 array containing {x,y} values that represent vector
+     * @param b len 2 array containing {x,y} values that represent vector
+     * @return subtracted vector
+     */
     public static double[] subtract(double[] a, double[] b) {
         double[] o = { a[0] - b[0], a[1] - b[1] };
         return o;
     }
 
+    /**
+     * Calculates euclidean magnitude of vector
+     * 
+     * @param vec len 2 array containing {x,y} values that represent vector
+     * @return double of magnitude
+     */
     public static double mag(double[] vec) {
         return Math.pow(vec[0] * vec[0] + vec[1] * vec[1], 0.5);
     }
 
+    /**
+     * Normalizes vector to its corresponding unit vector
+     * 
+     * @param vec len 2 array containing {x,y} values that represent vector
+     * @return normalized magnitude 1 unit vector
+     */
     public static double[] unitVec(double[] vec) {
         double mag = Math.pow(vec[0] * vec[0] + vec[1] * vec[1], 0.5) + 0.001;
         double[] unit = { vec[0] / mag, vec[1] / mag };

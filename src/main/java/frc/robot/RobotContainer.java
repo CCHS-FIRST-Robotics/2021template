@@ -67,7 +67,7 @@ public class RobotContainer {
   public void mainLoop() {
     this.main_command = this.ai.getCommand(this.main_state);
 
-    CommandHelper.updateState(this.main_state, this.main_command);
+    UpdateState.updateState(this.main_state, this.main_command);
     this.command_handler.scheduleCommands(this.main_command, this.hardware);
 
     if (this.drive_encoder_sensor.shouldUse()) {

@@ -7,6 +7,13 @@ import frc.robot.helper.SimpleMat;
 import frc.robot.Constants;
 import frc.robot.ai.subroutines.exit_methods.ExitMethods;
 
+/**
+ * StraightToPoint2 --- class that gives commands to drive from current location
+ * to output point along with exit condition to tell autonomous when it is done
+ * travelling.
+ * 
+ * @author Ludwig Tay
+ */
 public class StraightToPoint2 {
     PID forward_pid;
     double[] target = { 0, 0 };
@@ -19,14 +26,30 @@ public class StraightToPoint2 {
     double previous_ad;
     double[] line_norm = { 0, 1 };
 
+    /**
+     * Constructor, takes the x and y coordinate of the target in meters.
+     * 
+     * @param target_x
+     * @param target_y
+     */
     public StraightToPoint2(double target_x, double target_y) {
-        this.forward_pid = new PID(0.1, 0.001, 0.1); // must be k_i = 0
+        this.forward_pid = new PID(0.3, 0.05, 0.4); // must be k_i = 0
         this.target[0] = target_x;
         this.target[1] = target_y;
         this.previous_pwr = 0;
     }
 
+    /**
+     * Determines whether travel is complete through a variety of conditions: time +
+     * dist score > exit time (timer based exit) distance to target < acceptable
+     * distance distance and timer exit Angle of heading to target point > constant
+     * angle
+     * 
+     * @param main_state (current robot state)
+     * @return true/false on whether to exit (true for exit)
+     */
     public boolean exit(MainState main_state) {
+
         double ctime = (double) System.currentTimeMillis() / 1000;
         double t_dist = SimpleMat.vectorDistance(this.target, main_state.getPosVal());
         double score = (ctime - this.start_time_sec) + score_coeff / t_dist;
@@ -46,6 +69,13 @@ public class StraightToPoint2 {
         return false;
     }
 
+    /**
+     * Initialized values needed in exit conditions such as alloted time and initial
+     * distance
+     * 
+     * @param main_state
+     * @return none
+     */
     public void initExit(MainState main_state) {
         double t_dist = SimpleMat.vectorDistance(this.target, main_state.getPosVal());
         this.start_time_sec = System.currentTimeMillis() / 1000; // Start "timer" here
@@ -55,6 +85,14 @@ public class StraightToPoint2 {
         this.previous_ad = t_dist;
     }
 
+    /**
+     * Calculates the remaining distance needed to travel to target in the constant
+     * radius arc along with direction (Positive for forward, Negative for reverse)
+     * 
+     * @param state main_state of robot
+     * @param r     radius of the arc needed to travel from current pos to target
+     * @return double of arc distance in meters, can be positive or negative
+     */
     double arcDistance(MainState state, double r) {
         double[] delta = { this.target[0] - state.getPosVal()[0], this.target[1] - state.getPosVal()[1] };
         double[] heading = SimpleMat.projectHeading(state.getHeadingVal(), 1);
@@ -87,6 +125,14 @@ public class StraightToPoint2 {
         }
     }
 
+    /**
+     * DYSFUNCTIONAL, REPLACEMENT PENDING. calculates pwr to give the wheels to
+     * travel a given arc distance cleanly
+     * 
+     * @param state    main state of the robot.
+     * @param dist_mag double of remaining arc distance
+     * @return double of pwr output, [-1, 1]
+     */
     double pwrController(MainState state, double dist_mag) {
         double vel = (dist_mag - this.previous_ad) / Constants.MAIN_DT;
         double max_vel = 2 * Constants.MOTOR_MAX_RPM * Constants.WHEEL_RADIUS * Math.PI / 60;
@@ -130,6 +176,12 @@ public class StraightToPoint2 {
         return pwr;
     }
 
+    /**
+     * Decreases radius by a scalar factor to promote overcorrection in early parts
+     * of travel to avoid huge sweeping arcs
+     * 
+     * @return double scalar to multiply radius from [min r frac, 1]
+     */
     double rScalar() {
         double c_time = (double) System.currentTimeMillis() / 1000;
         double turn_max_t = Math.min(Constants.TURN_TIME_MAX, Constants.TURN_TIME_FAC * this.end_time);
@@ -139,6 +191,13 @@ public class StraightToPoint2 {
         return output;
     }
 
+    /**
+     * Computes command to give to hardware objects to travel from current location
+     * to the point.
+     * 
+     * @param main_state main_state of the robot.
+     * @return Command, command to give to the hardware.
+     */
     public Command update(MainState main_state) {
         double[] h_hat = SimpleMat.projectHeading(main_state.getHeadingVal(), 1);
         double[] current_pos = main_state.getPosVal();
@@ -154,8 +213,8 @@ public class StraightToPoint2 {
             prop_command[0] = prop_command[0] * -1;
             prop_command[1] = prop_command[1] * -1;
         }
-        double pwr = Math.max(Math.min(pwrController(main_state, arc_dist), 1), -1);
-        // double pwr = Math.max(Math.min(this.forward_pid(arc_dist), 1), -1);
+        // double pwr = Math.max(Math.min(pwrController(main_state, arc_dist), 1), -1);
+        double pwr = Math.max(Math.min(this.forward_pid.update(arc_dist), 1), -1);
         double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
 
         Command output = new Command(t_cmd[0], t_cmd[1]);
