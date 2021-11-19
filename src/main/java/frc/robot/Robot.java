@@ -28,6 +28,11 @@ public class Robot extends TimedRobot {
   Logging log = new Logging();
   File myObj;
 
+  /**
+   * Method for handling logging and printing.
+   * 
+   * @param rContainer robot container.
+   */
   public void loggingConfigure(RobotContainer rContainer) {
     double[] accv = rContainer.imu_sensor.log_acc;
     String[] name = { "IMU Fused Heading", "Yaw Rate", "Pitch", "Acceleration 0", "Acceleration 1", "L Encoder Radss",
@@ -49,6 +54,10 @@ public class Robot extends TimedRobot {
     }
   }
 
+  /**
+   * Constructor for Robot, makes robot container and puts it into a constantly
+   * running main loop, regardless of other elements.
+   */
   public Robot() {
     this.myObj = new File("ai/autonomous_commands/auton1.txt");
     this.robotContainer = new RobotContainer();

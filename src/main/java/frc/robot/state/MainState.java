@@ -2,13 +2,34 @@ package frc.robot.state;
 
 import java.lang.*;
 
+/**
+ * MainState that is a collection for every substate object that comprises the
+ * robot. Core of robot program.
+ * 
+ * @author Ludwig Tay
+ */
 public class MainState {
     Kinematics Phy = new Kinematics();
 
+    /**
+     * predict all subclass states for dt time in the future.
+     * 
+     * @param dt time to predict in seconds.
+     */
     public void predict(double dt) {
         this.Phy.predict(dt);
     }
 
+    /**
+     * Kalman Update. Main method of fusing sensor values by comparing variances.
+     * 
+     * @param current_val Current value from state.
+     * @param current_var Current variance from state.
+     * @param sensed_val  Sensed value from sensor.
+     * @param sensed_var  Sensed variance from sensor.
+     * @return Double len 2 array. Element 0 is fused value, Element 1 is fused
+     *         variance.
+     */
     public double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
         double kalman_gain = current_var / (current_var + sensed_var);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
@@ -22,6 +43,17 @@ public class MainState {
         }
     }
 
+    /**
+     * Kalman Update. Main method of fusing sensor values by comparing variances.
+     * Special version for wrapping angular values like heading.
+     * 
+     * @param current_val Current value from state.
+     * @param current_var Current variance from state.
+     * @param sensed_val  Sensed value from sensor.
+     * @param sensed_var  Sensed variance from sensor.
+     * @return Double len 2 array. Element 0 is fused value, Element 1 is fused
+     *         variance.
+     */
     public double[] kalmanAngleUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
         double[] candidate_sval = { sensed_val - 2 * Math.PI, sensed_val, sensed_val + 2 * Math.PI };
         double new_sval = sensed_val;

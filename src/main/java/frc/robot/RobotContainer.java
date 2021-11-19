@@ -20,11 +20,10 @@ import frc.robot.network.*;
 import static frc.robot.Constants.*;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
- * scheduler calls). Instead, the structure of the robot (including subsystems,
- * commands, and button mappings) should be declared here.
+ * RobotContainer class, contains every class of the robot and is constantly
+ * running.
+ * 
+ * @author Ludwig Tay
  */
 public class RobotContainer {
   public MainState main_state = new MainState();
@@ -39,6 +38,9 @@ public class RobotContainer {
   public HardwareObjects hardware;
   public Network network;
 
+  /**
+   * RobotContainer Constructor.
+   */
   public RobotContainer() {
     this.main_state = new MainState();
     this.ai = new AI();
@@ -57,6 +59,9 @@ public class RobotContainer {
 
   }
 
+  /**
+   * Reset values in robot container.
+   */
   public void reset() {
     this.imu_sensor.reset(this.hardware);
     this.main_command = new Command(0, 0);
@@ -64,6 +69,9 @@ public class RobotContainer {
     this.network.init();
   }
 
+  /**
+   * mainLoop that executes state update, predict, ai and command scheduling.
+   */
   public void mainLoop() {
     this.main_command = this.ai.getCommand(this.main_state);
 
@@ -83,10 +91,16 @@ public class RobotContainer {
     this.network.writeNTable();
   }
 
+  /**
+   * Sets finite state in AI to controller.
+   */
   public void setControllerState() {
     this.ai.setControllerState();
   }
 
+  /**
+   * Sets finite state in AI to auton.
+   */
   public void setAutonomousState() {
     this.ai.setAutonomousState();
   }

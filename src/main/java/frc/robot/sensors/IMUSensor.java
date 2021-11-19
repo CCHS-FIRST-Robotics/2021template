@@ -7,6 +7,12 @@ import frc.robot.HardwareObjects;
 import frc.robot.state.MainState;
 import frc.robot.helper.*;
 
+/**
+ * Sensor handling IMU values, main way of updating heading and also updates vel
+ * and projected acceleration
+ * 
+ * @author Ludwig Tay
+ */
 public class IMUSensor extends BaseSensor {
 
     double ang_var = 0.0;
@@ -21,16 +27,29 @@ public class IMUSensor extends BaseSensor {
     double[] xyz_acc_zero = { 0, 0, 9.81 };
     double yz_mag_zero = 9.81;
 
+    /**
+     * Constructor for IMUSensor.
+     * 
+     * @param sync_time UNUSED.
+     */
     public IMUSensor(double sync_time) {
         this.ang_var = Constants.BASE_HEADING_VAR;
         this.SYNC_TIME = sync_time;
     }
 
+    /**
+     * Standard sensor method to determine whether to use or not in main loop.
+     * 
+     * @param shouldUse true if ready to use.
+     */
     public boolean shouldUse(HardwareObjects hardware) {
         this.log_active_sensor = (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
         return (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
     }
 
+    /**
+     * Method used to increase angular variance over time
+     */
     void updateHeadingVar() {
         this.ang_var = this.ang_var + Constants.DELTA_VAR * Constants.MAIN_DT;
         if (this.ang_var > Constants.MAX_HEADING_VAR) {
@@ -38,6 +57,12 @@ public class IMUSensor extends BaseSensor {
         }
     }
 
+    /**
+     * Resets the values for IMU, also zeroes the accelerometer. Should only be done
+     * while there is no motion.
+     * 
+     * @param hardware Robot hardware objects.
+     */
     public void reset(HardwareObjects hardware) {
         short[] xyz_acc = new short[3];
         hardware.IMU.getBiasedAccelerometer(xyz_acc);
@@ -55,6 +80,15 @@ public class IMUSensor extends BaseSensor {
         hardware.IMU.setFusedHeading(0);
     }
 
+    /**
+     * Projects acceleration vector in the direction of the heading to make more
+     * consistent values.
+     * 
+     * @param state  main robot state.
+     * @param xy_acc x and y acceleration values of the robot.
+     * 
+     * @return acc projected acceleration values.
+     */
     double[] projectAcc(MainState state, double[] xy_acc) {
         double xy_mag = SimpleMat.mag(xy_acc);
         double[] acc = { 0, 0 };
@@ -68,6 +102,12 @@ public class IMUSensor extends BaseSensor {
         return acc;
     }
 
+    /**
+     * Get IMU values and project acc, kalman update heading, ang vel, acc
+     * 
+     * @param state    main robot state.
+     * @param hardware robot hardware object.
+     */
     public void processValue(MainState state, HardwareObjects hardware) {
         double[] xyz_dps = new double[3];
         short[] xyz_acc = new short[3];
