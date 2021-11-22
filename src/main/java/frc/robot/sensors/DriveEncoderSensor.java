@@ -111,6 +111,10 @@ public class DriveEncoderSensor extends BaseSensor {
         double l_radss = l_raw * 2 * Math.PI * -1 / (60 * 8.35);
         double r_radss = r_raw * 2 * Math.PI / (60 * 8.35);
 
+        // Update wheel rpm state
+        state.setLWhlRadss(l_radss, 0);
+        state.setRWhlRadss(r_radss, 0);
+
         this.log_l_radss = l_radss;
         this.log_r_radss = r_radss;
 

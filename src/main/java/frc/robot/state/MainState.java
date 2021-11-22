@@ -10,6 +10,7 @@ import java.lang.*;
  */
 public class MainState {
     Kinematics Phy = new Kinematics();
+    Wheel Whl = new Wheel();
 
     /**
      * predict all subclass states for dt time in the future.
@@ -162,5 +163,32 @@ public class MainState {
     public void setAngAcc(double val, double var) {
         this.Phy.Val.ang_acc = val;
         this.Phy.Var.ang_acc = var;
+    }
+
+    // Wheel RPM
+    public double getLWhlRadssVal() {
+        return this.Whl.Val.left_wheel_radss;
+    }
+
+    public double getLWhlRadssVar() {
+        return this.Whl.Var.left_wheel_radss;
+    }
+
+    public void setLWhlRadss(double val, double var) {
+        this.Whl.Val.left_wheel_radss = val;
+        this.Whl.Var.left_wheel_radss = var;
+    }
+
+    public double getRWhlRadssVal() {
+        return this.Whl.Val.right_wheel_radss;
+    }
+
+    public double getRWhlRadssVar() {
+        return this.Whl.Var.right_wheel_radss;
+    }
+
+    public void setRWhlRadss(double val, double var) {
+        this.Whl.Val.right_wheel_radss = val;
+        this.Whl.Var.right_wheel_radss = var;
     }
 }

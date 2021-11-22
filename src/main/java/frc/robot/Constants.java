@@ -52,6 +52,8 @@ public final class Constants {
     public static final double INIT_DW = 0.4;
 
     public static final double INIT_VARIANCE = 0.001;
+
+    public static final double INIT_WHL_RPM = 0;
     // ==================
     // VARIANCE LINEAR APPROX
     // ==================
@@ -119,5 +121,8 @@ public final class Constants {
     public static final double TURN_TIME_FAC = 0.4;
     public static final double TURN_TIME_MAX = 2;
     public static final double MIN_R_FAC = 0.8;
+
+    // Standard PID Tunings
+    public static final double[] drive_wheel_tuning = { 0.1, 0.1, 0.1 };
 
 }
