@@ -121,7 +121,7 @@ public class DriveEncoderSensor extends BaseSensor {
         localDisplacement(l_radss, r_radss, Constants.MAIN_DT);
 
         double[] o_delta = { 0, 0 };
-        o_delta = SimpleMat.rot2d(o_local_delta, this.heading);
+        o_delta = SimpleMat.rot2d(this.o_local_delta, this.heading);
 
         double[] pred_pos = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
 
@@ -142,10 +142,10 @@ public class DriveEncoderSensor extends BaseSensor {
         double h_ang_var = Constants.VAR_RAD_VAR * diff_coeff / Constants.ROBOT_WIDTH;
 
         // Pos
-        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var);
-        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var);
-        double[] kpos = { xpos[0], ypos[1] };
-        state.setPos(kpos, xpos[1]); // potential to set pred pos
+        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var*0.1);
+        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var*0.1);
+        double[] kpos = { pred_pos[0]*0.9 + state.getPosVal()[0]*0.1, pred_pos[1]*0.9 + state.getPosVal()[1]*0.1 };
+        state.setPos(kpos, state.getPosVar()); // potential to set pred pos
 
         // Vel
         double[] xvel = state.kalmanUpdate(state.getVelVal()[0], state.getVelVar(), o_delta[0] / Constants.MAIN_DT,

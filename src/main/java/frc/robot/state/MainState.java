@@ -32,7 +32,7 @@ public class MainState {
      *         variance.
      */
     public double[] kalmanUpdate(double current_val, double current_var, double sensed_val, double sensed_var) {
-        double kalman_gain = current_var / (current_var + sensed_var);
+        double kalman_gain = current_var / (current_var + sensed_var + 0.0001);
         double new_val = kalman_gain * sensed_val + (1 - kalman_gain) * current_val;
         double new_var = kalman_gain * sensed_var + (1 - kalman_gain) * current_var;
         if (Double.isNaN(new_val) || Double.isNaN(new_var)) {
