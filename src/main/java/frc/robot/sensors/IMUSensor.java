@@ -99,6 +99,10 @@ public class IMUSensor extends BaseSensor {
         double[] projected_acc = SimpleMat.scaleVec(h_unit, SimpleMat.dot(h_unit, xy_acc));
         acc[0] = 0.5 * projected_acc[0] + 0.5 * xy_acc[0];
         acc[1] = 0.5 * projected_acc[1] + 0.5 * xy_acc[1];
+        if (SimpleMat.mag(acc) < 0.2) {
+            acc[0] = 0;
+            acc[1] = 0;
+        }
         return acc;
     }
 
