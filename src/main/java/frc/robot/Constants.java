@@ -120,5 +120,6 @@ public final class Constants {
     // LIMELIGHT
     // ==================
 
-    public static final double LIME_LIGHT_ANGLE = 45;
+    public static final double LIME_LIGHT_ANGLE  = 45;
+    public static final double LIME_LIGHT_HEIGHT = 1.0;
 }

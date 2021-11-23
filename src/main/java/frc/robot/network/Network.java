@@ -22,5 +22,9 @@ public class Network {
     public void writeNTable() {
         Random rand = new Random();
         testEntry.setDouble(rand.nextGaussian());
+
+    //add: something to check if done
+    //add: get values (need for limelight)
+    //add: update pipeline
     }
 }
