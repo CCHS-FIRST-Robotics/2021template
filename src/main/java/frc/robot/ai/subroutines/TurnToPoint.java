@@ -28,7 +28,7 @@ public class TurnToPoint {
     public TurnToPoint(double target_x, double target_y) {
         this.target_pos[0] = target_x;
         this.target_pos[1] = target_y;
-        this.turn_pid = new PID(0.2, 0.1, 0.05);
+        this.turn_pid = new PID(Constants.TURN_TUNING[0], Constants.TURN_TUNING[1], Constants.TURN_TUNING[2]);
         this.main_command = new Command(0, 0);
     }
 

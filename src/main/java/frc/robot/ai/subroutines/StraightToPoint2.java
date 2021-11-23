@@ -33,7 +33,8 @@ public class StraightToPoint2 {
      * @param target_y
      */
     public StraightToPoint2(double target_x, double target_y) {
-        this.forward_pid = new PID(0.3, 0.05, 0.4); // must be k_i = 0
+        this.forward_pid = new PID(Constants.FORWARD_TUNING[0], Constants.FORWARD_TUNING[1],
+                Constants.FORWARD_TUNING[2]); // must be k_i = 0
         this.target[0] = target_x;
         this.target[1] = target_y;
         this.previous_pwr = 0;
@@ -123,57 +124,6 @@ public class StraightToPoint2 {
         } else {
             return dist_mag * 1;
         }
-    }
-
-    /**
-     * DYSFUNCTIONAL, REPLACEMENT PENDING. calculates pwr to give the wheels to
-     * travel a given arc distance cleanly
-     * 
-     * @param state    main state of the robot.
-     * @param dist_mag double of remaining arc distance
-     * @return double of pwr output, [-1, 1]
-     */
-    double pwrController(MainState state, double dist_mag) {
-        double vel = (dist_mag - this.previous_ad) / Constants.MAIN_DT;
-        double max_vel = 2 * Constants.MOTOR_MAX_RPM * Constants.WHEEL_RADIUS * Math.PI / 60;
-        double max_acc = (2 * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
-        this.previous_ad = dist_mag;
-        double drift_dist = -1 * max_vel * max_vel / (Constants.INIT_FRICTION * Constants.GRAV_ACC);
-        if (drift_dist < dist_mag) {
-            this.previous_pwr = 1;
-            return 1;
-        } else if (drift_dist * -1 > dist_mag) {
-            this.previous_pwr = -1;
-            return -1;
-        }
-        double discriminant = 4 * vel * vel + 6 * max_acc * this.previous_pwr * dist_mag;
-        if (discriminant < 0) {
-            double des_acc = -1 * (2 / 3) * (vel * vel) / dist_mag;
-            double pwr = des_acc / max_acc;
-            this.previous_pwr = pwr;
-            return pwr;
-        }
-        double n = 1;
-        double nm = -2 * vel - Math.pow(discriminant, 0.5) * (1 / (max_acc * this.previous_pwr));
-        double np = -2 * vel + Math.pow(discriminant, 0.5) * (1 / (max_acc * this.previous_pwr));
-        if (nm > 0) {
-            n = nm;
-        } else if (np > 0) {
-            n = np;
-        } else {
-            double pwr = dist_mag * 0.2;
-            this.previous_pwr = pwr;
-            return pwr;
-        }
-        if (n > 1.8) {
-            double pwr = dist_mag * 0.2;
-            this.previous_pwr = pwr;
-            return pwr;
-        }
-        double slope = -2 * (vel + (max_acc * this.previous_pwr) * n) / (n * n);
-        double pwr = ((max_acc * this.previous_pwr) + slope * Constants.MAIN_DT) / max_acc;
-        this.previous_pwr = pwr;
-        return pwr;
     }
 
     /**
