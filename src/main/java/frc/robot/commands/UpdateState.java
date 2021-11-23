@@ -15,7 +15,7 @@ public class UpdateState {
         }
         return factor;
     }
-    
+
     public static double motorForce(MainState state, double pwr_prop) {
         double[] h_vec = SimpleMat.projectHeading(state.getHeadingVal(), 1);
         double rel_vel = SimpleMat.scalarProject(h_vec, state.getVelVal());
@@ -23,6 +23,7 @@ public class UpdateState {
         double f = pwr_prop * Constants.MOTOR_MAX_TORQUE * wheelForceFactor(pwr_prop, rel_vel) / Constants.WHEEL_RADIUS;
         return f;
     }
+
     public static void updateState(MainState state, Command command) {
         // Accel + Ang Vel
         double m_o_i = Constants.ROBOT_WIDTH * Constants.ROBOT_WIDTH * Constants.ROBOT_MASS * 0.125;
@@ -39,6 +40,11 @@ public class UpdateState {
 
         double ave_prop_coeff = (Math.abs(command.left_pwr_prop) + Math.abs(command.right_pwr_prop)) * 0.5;
         state.setAngAcc(ang_acc, Constants.ANG_VEL_VARIANCE * ave_prop_coeff);
-        state.setAcc(acc, Constants.ACC_VARIANCE * ave_prop_coeff);
-    }    
+        double[] x_acc = state.kalmanUpdate(state.getAccVal()[0], state.getAccVar(), acc[0],
+                Constants.ACC_VARIANCE * ave_prop_coeff);
+        double[] y_acc = state.kalmanUpdate(state.getAccVal()[1], state.getAccVar(), acc[1],
+                Constants.ACC_VARIANCE * ave_prop_coeff);
+        double[] fused_acc = { x_acc[0], y_acc[0] };
+        state.setAcc(fused_acc, x_acc[1]);
+    }
 }
