@@ -122,4 +122,7 @@ public final class Constants {
 
     public static final double LIME_LIGHT_ANGLE  = 45;
     public static final double LIME_LIGHT_HEIGHT = 1.0;
+    public static final double TARGET_1          = 1.0; //PLACE HOLDER
+    public static final double TARGET_2          = 2.0; //can also add more heights if needed
+    public static final double TARGET_3          = 3.0;
 }
