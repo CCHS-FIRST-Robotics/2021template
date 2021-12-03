@@ -140,6 +140,35 @@ public class StraightToPoint2 {
         double output = Math.min(prop_comp + Constants.MIN_R_FAC, 1);
         return output;
     }
+    
+    /**
+     * Checks whether an acceleration/deceleration to and from max velocity will 
+     * within the planned distance
+     * 
+     * @param init_vel
+     * @param distance
+     * @return
+     */
+    boolean maxVelocityCheck(double init_vel, double distance) {
+        double max_vel = Integer.MAX_VALUE; // TEMP
+        double max_accel = 420.69; // TEMP
+        double max_decel = -max_accel;
+        
+        // Trapezoid area
+        double max_accel_diff = max_vel - init_vel; 
+        double accel_time = Math.sqrt((max_accel * max_accel) - (max_accel_diff * max_accel_diff));
+        double accel_dist = ((init_vel + max_vel) / 2) * accel_time;
+
+        // Triangle area
+        double decel_time = Math.sqrt((max_decel * max_decel) - (max_vel * max_vel));
+        double decel_dist = (max_vel * decel_time) / 2;
+
+        if (accel_dist + decel_dist < distance) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Computes command to give to hardware objects to travel from current location
