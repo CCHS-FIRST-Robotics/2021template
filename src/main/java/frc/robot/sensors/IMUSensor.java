@@ -7,6 +7,12 @@ import frc.robot.HardwareObjects;
 import frc.robot.state.MainState;
 import frc.robot.helper.*;
 
+/**
+ * Sensor handling IMU values, main way of updating heading and also updates vel
+ * and projected acceleration
+ * 
+ * @author Ludwig Tay
+ */
 public class IMUSensor extends BaseSensor {
 
     double ang_var = 0.0;
@@ -18,19 +24,32 @@ public class IMUSensor extends BaseSensor {
     public double log_yaw_vel;
 
     double x_acc_zero = 0;
-    double[] yz_acc_zero = { 0, 9.81 };
+    double[] xyz_acc_zero = { 0, 0, 9.81 };
     double yz_mag_zero = 9.81;
 
+    /**
+     * Constructor for IMUSensor.
+     * 
+     * @param sync_time UNUSED.
+     */
     public IMUSensor(double sync_time) {
         this.ang_var = Constants.BASE_HEADING_VAR;
         this.SYNC_TIME = sync_time;
     }
 
+    /**
+     * Standard sensor method to determine whether to use or not in main loop.
+     * 
+     * @param shouldUse true if ready to use.
+     */
     public boolean shouldUse(HardwareObjects hardware) {
         this.log_active_sensor = (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
         return (hardware.IMU.getState() == PigeonIMU.PigeonState.Ready);
     }
 
+    /**
+     * Method used to increase angular variance over time
+     */
     void updateHeadingVar() {
         this.ang_var = this.ang_var + Constants.DELTA_VAR * Constants.MAIN_DT;
         if (this.ang_var > Constants.MAX_HEADING_VAR) {
@@ -38,6 +57,12 @@ public class IMUSensor extends BaseSensor {
         }
     }
 
+    /**
+     * Resets the values for IMU, also zeroes the accelerometer. Should only be done
+     * while there is no motion.
+     * 
+     * @param hardware Robot hardware objects.
+     */
     public void reset(HardwareObjects hardware) {
         short[] xyz_acc = new short[3];
         hardware.IMU.getBiasedAccelerometer(xyz_acc);
@@ -46,14 +71,47 @@ public class IMUSensor extends BaseSensor {
         double z_acc = (double) xyz_acc[2] * -9.81 / 16384;
 
         this.x_acc_zero = x_acc;
-        this.yz_acc_zero[0] = y_acc;
-        this.yz_acc_zero[1] = z_acc;
+        this.xyz_acc_zero[0] = x_acc;
+        this.xyz_acc_zero[1] = y_acc;
+        this.xyz_acc_zero[2] = z_acc;
 
-        this.yz_mag_zero = SimpleMat.mag(this.yz_acc_zero);
+        this.yz_mag_zero = SimpleMat.mag(this.xyz_acc_zero) - 9.8;
 
         hardware.IMU.setFusedHeading(0);
     }
 
+    /**
+     * Projects acceleration vector in the direction of the heading to make more
+     * consistent values.
+     * 
+     * @param state  main robot state.
+     * @param xy_acc x and y acceleration values of the robot.
+     * 
+     * @return acc projected acceleration values.
+     */
+    double[] projectAcc(MainState state, double[] xy_acc) {
+        double xy_mag = SimpleMat.mag(xy_acc);
+        double[] acc = { 0, 0 };
+        if (xy_mag < this.yz_mag_zero) {
+            return acc;
+        }
+        double[] h_unit = SimpleMat.projectHeading(state.getHeadingVal(), 1);
+        double[] projected_acc = SimpleMat.scaleVec(h_unit, SimpleMat.dot(h_unit, xy_acc));
+        acc[0] = 0.5 * projected_acc[0] + 0.5 * xy_acc[0];
+        acc[1] = 0.5 * projected_acc[1] + 0.5 * xy_acc[1];
+        if (SimpleMat.mag(acc) < 0.2) {
+            acc[0] = 0;
+            acc[1] = 0;
+        }
+        return acc;
+    }
+
+    /**
+     * Get IMU values and project acc, kalman update heading, ang vel, acc
+     * 
+     * @param state    main robot state.
+     * @param hardware robot hardware object.
+     */
     public void processValue(MainState state, HardwareObjects hardware) {
         double[] xyz_dps = new double[3];
         short[] xyz_acc = new short[3];
@@ -68,16 +126,18 @@ public class IMUSensor extends BaseSensor {
         hardware.IMU.getYawPitchRoll(ypr_deg);
         // 16384 = 1g
 
+        double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
+
         double x_acc = (double) xyz_acc[0] * -9.81 / 16384;
         x_acc = x_acc - x_acc_zero;
 
-        double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
         double yt_acc = (double) xyz_acc[1] * -9.81 / 16384;
         double zt_acc = (double) xyz_acc[2] * -9.81 / 16384;
-        double y_acc = yt_acc * Math.cos(r_pitch) - zt_acc * Math.sin(r_pitch);
+        double y_acc = yt_acc * Math.cos(r_pitch) + zt_acc * Math.sin(r_pitch);
 
-        double[] acc_l_vec = { x_acc, y_acc };
-        double[] global_acc = SimpleMat.rot2d(acc_l_vec, state.getHeadingVal());
+        double[] xy_acc = { x_acc, y_acc };
+        xy_acc = SimpleMat.rot2d(xy_acc, state.getHeadingVal());
+        double[] global_acc = projectAcc(state, xy_acc);
 
         this.log_acc[0] = x_acc;
         this.log_acc[1] = y_acc;
@@ -107,7 +167,7 @@ public class IMUSensor extends BaseSensor {
                 Constants.IMU_ACC_VAR);
 
         double[] new_acc = { kxacc[0], kyacc[1] };
-        // state.setAcc(new_acc, kxacc[1]);
+        state.setAcc(new_acc, kxacc[1]);
 
         updateHeadingVar();
     }

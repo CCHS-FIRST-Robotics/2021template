@@ -4,7 +4,11 @@ import frc.robot.state.*;
 import frc.robot.ai.finite_state.*;
 import frc.robot.commands.*;
 
-//AI IS A STATE MACHINE
+/**
+ * AI finite state machine class, handles switching between various autonomous
+ * and controller states. Should eventually gain capability to reset states and
+ * load various autons
+ */
 public class AI {
     enum States {
         CONTROLLER, AUTONOMOUS, DISABLED
@@ -17,6 +21,9 @@ public class AI {
     // public AutonomousTravel autonomous;
     public AutonomousTravel autonomous;
 
+    /**
+     * Constructor for AI
+     */
     public AI() {
         this.current_state = States.CONTROLLER;
         this.controller_state = new Controller();
@@ -24,6 +31,12 @@ public class AI {
         this.autonomous = new AutonomousTravel();
     }
 
+    /**
+     * Get hardware command from the various states
+     * 
+     * @param state main robot state
+     * @return hardware command
+     */
     public Command getCommand(MainState state) {
         switch (this.current_state) {
             case CONTROLLER:
@@ -32,6 +45,8 @@ public class AI {
             case AUTONOMOUS:
                 main_command = this.autonomous.getCommands(state);
                 break;
+            case DISABLED:
+                main_command = new Command(0, 0);
         }
         return main_command;
     }

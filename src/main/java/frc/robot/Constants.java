@@ -52,6 +52,8 @@ public final class Constants {
     public static final double INIT_DW = 0.4;
 
     public static final double INIT_VARIANCE = 0.001;
+
+    public static final double INIT_WHL_RPM = 0;
     // ==================
     // VARIANCE LINEAR APPROX
     // ==================
@@ -70,20 +72,20 @@ public final class Constants {
     public static final double DELTA_VAR = 0.0001;
     public static final double MAX_HEADING_VAR = 0.3 * 0.3;
 
-    public static final double IMU_ACC_VAR = 1.0 * 1.0;
+    public static final double IMU_ACC_VAR = 4;
     // ==================
     // TIME CONSTANTS
     // ==================
-    public static final double MAIN_DT = 0.02;
+    public static final double MAIN_DT = 0.01;
 
     // ==================
     // MOTOR CONSTANTS
     // ==================
     public static final double MOTOR_MAX_POWER = 674; // OUTPUT IN WATTS
 
-    public static final double MOTOR_MAX_TORQUE = 142.73;
+    public static final double MOTOR_MAX_TORQUE = 40.97;
 
-    public static final double MOTOR_MAX_RPM = 180;
+    public static final double MOTOR_MAX_RPM = 400;
 
     public static final double MOTOR_PROP_VAR = 0.1;
 
@@ -104,17 +106,28 @@ public final class Constants {
     public static final double NO_ORIENT_DIST = 0.5;
 
     public static final double TIMER_START = 1;
-    public static final double TIMER_LEEWAY = 1.7;
+    public static final double TIMER_LEEWAY = 8;
 
     public static final double ACCEPTABLE_DIST_ERROR = 0.03;
 
+    public static final double ACCEPTABLE_DIST_SOFT = 0.4;
+
     public static final double ACCEPTABLE_ANGLE_ERROR = 0.05;
 
-    public static final double TURN_LEEWAY = 3;
+    public static final double EXIT_THETA = 1.2217;
+
+    public static final double TURN_LEEWAY = 6;
 
     public static final double TURN_TIME_FAC = 0.4;
     public static final double TURN_TIME_MAX = 2;
-    public static final double MIN_R_FAC = 0.4;
+    public static final double MIN_R_FAC = 0.8;
+
+    // Standard PID Tunings
+    public static final double[] DRIVE_WHL_TUNING = { 0.1, 0.1, 0.1 };
+
+    public static final double[] TURN_TUNING = { 0.2, 0.1, 0.05 };
+
+    public static final double[] FORWARD_TUNING = { 0.3, 0.05, 0.4 };
 
     // ==================
     // LIMELIGHT

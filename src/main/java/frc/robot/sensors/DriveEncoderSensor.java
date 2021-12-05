@@ -10,6 +10,12 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import java.lang.Math;
 import frc.robot.HardwareObjects;
 
+/**
+ * Class that manages drive encoder values and converts it to interpretable
+ * values in main state by doing wheel odometry calculations
+ * 
+ * @author Ludwig Tay
+ */
 public class DriveEncoderSensor extends BaseSensor {
 
     double pos[] = { 0, 0 };
@@ -27,16 +33,34 @@ public class DriveEncoderSensor extends BaseSensor {
     public double log_h_pred = 0;
     public double log_hk_pred = 0;
 
+    /**
+     * Constructor for DriveEncoderSensor.
+     * 
+     * @param sync_time UNUSED time of system start for synchronization.
+     */
     public DriveEncoderSensor(double sync_time) {
         this.LAG_TIME = 0.0; // No Lag
         this.SYNC_TIME = sync_time;
         this.last_updated = sync_time;
     }
 
+    /**
+     * Standard method to tell main loop whether sensor will give reasonable and
+     * productive values. Always true (Potential for sensor health check implemented
+     * here)
+     * 
+     * @return always true
+     */
     public boolean shouldUse() {
         return true;
     }
 
+    /**
+     * Checking validity of sensor rad/s values
+     * 
+     * @param radss radians/second
+     * @return true if inside limits
+     */
     public boolean commonSense(double radss) {
         if (radss > 100) {
             return false;
@@ -47,11 +71,19 @@ public class DriveEncoderSensor extends BaseSensor {
         return true;
     }
 
+    /**
+     * Calculate the local displacement of the robot (does not take into account
+     * current heading) from the motor encoder values. Doing wheel odometry
+     * calculations.
+     * 
+     * @param l_radss left wheel radians/second
+     * @param r_radss right wheel radians/second
+     */
     public void localDisplacement(double l_radss, double r_radss, double dt) {
-        double l = l_radss * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
-        double r = r_radss * Constants.WHEEL_RADIUS * Constants.INIT_R_WHL_TRAC;
+        double l = dt * l_radss * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
+        double r = dt * r_radss * Constants.WHEEL_RADIUS * Constants.INIT_R_WHL_TRAC;
 
-        this.arc_angle = dt * (r - l) / Constants.ROBOT_WIDTH;
+        this.arc_angle = (r - l) / Constants.ROBOT_WIDTH;
 
         if (r == l) {
             this.o_local_delta[0] = 0;
@@ -63,13 +95,25 @@ public class DriveEncoderSensor extends BaseSensor {
         }
     }
 
+    /**
+     * Takes sensor values, calculate local displacement, transform with heading.
+     * Generates a new position, heading, position, velocity, angular velocity that
+     * is kalman updated into main state.
+     * 
+     * @param state    main state of robot.
+     * @param hardware hardware object of the robot.
+     */
     public void processValue(MainState state, HardwareObjects hardware) {
 
         double l_raw = hardware.LEFT_MOTOR1.getSelectedSensorVelocity(1);
         double r_raw = hardware.RIGHT_MOTOR1.getSelectedSensorVelocity(1);
-        // Convert to 4096 units/rot / 100ms
-        double l_radss = l_raw * 2 * Math.PI * -1 / (4096 * 0.33 * 8.35 / 10);
-        double r_radss = r_raw * 2 * Math.PI / (4096 * 0.33 * 8.35 / 10);
+        // Convert from RPM
+        double l_radss = l_raw * 2 * Math.PI * -1 / (60 * 8.35);
+        double r_radss = r_raw * 2 * Math.PI / (60 * 8.35);
+
+        // Update wheel rpm state
+        state.setLWhlRadss(l_radss, 0);
+        state.setRWhlRadss(r_radss, 0);
 
         this.log_l_radss = l_radss;
         this.log_r_radss = r_radss;
@@ -77,11 +121,11 @@ public class DriveEncoderSensor extends BaseSensor {
         localDisplacement(l_radss, r_radss, Constants.MAIN_DT);
 
         double[] o_delta = { 0, 0 };
-        o_delta = SimpleMat.rot2d(o_local_delta, this.heading);
+        o_delta = SimpleMat.rot2d(this.o_local_delta, this.heading);
 
         double[] pred_pos = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
 
-        double new_heading = this.heading + SimpleMat.angleRectifier(this.arc_angle);
+        double new_heading = this.heading + this.arc_angle;
 
         // compute variances
         double dist_coeff = (Math.abs(l_radss) + Math.abs(r_radss)) * Constants.MAIN_DT / (2 * Math.PI);
@@ -98,10 +142,10 @@ public class DriveEncoderSensor extends BaseSensor {
         double h_ang_var = Constants.VAR_RAD_VAR * diff_coeff / Constants.ROBOT_WIDTH;
 
         // Pos
-        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var);
-        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var);
-        double[] kpos = { xpos[0], ypos[1] };
-        state.setPos(pred_pos, xpos[1]);
+        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var*0.1);
+        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var*0.1);
+        double[] kpos = { pred_pos[0]*0.9 + state.getPosVal()[0]*0.1, pred_pos[1]*0.9 + state.getPosVal()[1]*0.1 };
+        state.setPos(kpos, state.getPosVar()); // potential to set pred pos
 
         // Vel
         double[] xvel = state.kalmanUpdate(state.getVelVal()[0], state.getVelVar(), o_delta[0] / Constants.MAIN_DT,

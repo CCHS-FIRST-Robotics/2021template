@@ -4,6 +4,12 @@ import frc.robot.Constants;
 import frc.robot.helper.SimpleMat;
 import java.lang.Math;
 
+/**
+ * Class handles robot motion kinematics. Stores values and variances and
+ * calculates updates over dt time.
+ * 
+ * @author Ludwig Tay
+ */
 public class Kinematics {
 
     public double friction = Constants.INIT_FRICTION;
@@ -11,15 +17,28 @@ public class Kinematics {
     public Values Val = new Values();
     public Variances Var = new Variances();
 
+    /**
+     * Constructor for Kinematics class.
+     */
     public Kinematics() {
         this.friction = Constants.INIT_FRICTION;
     }
 
+    /**
+     * predict values and variances over dt time
+     * 
+     * @param dt time in seconds for update
+     */
     public void predict(double dt) {
         this.Val.predict(dt);
         this.Var.predict(dt);
     }
 
+    /**
+     * Embedded class that holds values for kinematics parameters
+     * 
+     * @author Ludwig Tay
+     */
     class Values {
         public double[] pos = Constants.INIT_POS;
         public double[] vel = Constants.INIT_VEL;
@@ -29,6 +48,9 @@ public class Kinematics {
         public double ang_vel = Constants.INIT_ANG_VEL;
         public double ang_acc = Constants.INIT_ANG_ACC;
 
+        /**
+         * Constructor for values
+         */
         public Values() {
             this.pos = Constants.INIT_POS;
             this.vel = Constants.INIT_VEL;
@@ -39,6 +61,11 @@ public class Kinematics {
 
         }
 
+        /**
+         * Predict all kinematics values for dt time.
+         * 
+         * @param dt update time in seconds.
+         */
         public void predict(double dt) {
             // FRICTION ACCEL
             double[] vel_unit = SimpleMat.unitVec(this.vel);
@@ -76,6 +103,11 @@ public class Kinematics {
         }
     }
 
+    /**
+     * Subclass that stores and predicts variances for all the kinematics parameters
+     * 
+     * @author Ludwig Tay
+     */
     class Variances {
         public double pos = Constants.INIT_VARIANCE;
         public double vel = Constants.INIT_VARIANCE;
@@ -85,6 +117,9 @@ public class Kinematics {
         public double ang_vel = Constants.INIT_VARIANCE;
         public double ang_acc = Constants.INIT_VARIANCE;
 
+        /**
+         * Constructor for Variances
+         */
         public Variances() {
             this.pos = Constants.INIT_VARIANCE;
             this.vel = Constants.INIT_VARIANCE;
@@ -96,6 +131,11 @@ public class Kinematics {
 
         }
 
+        /**
+         * Predict variances for dt time in the future.
+         * 
+         * @param dt predict future time in seconds.
+         */
         public void predict(double dt) {
             this.pos = this.pos + this.vel * dt + 0.5 * this.acc * dt * dt;
             this.vel = this.vel + this.acc * dt;
