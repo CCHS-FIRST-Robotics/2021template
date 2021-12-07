@@ -38,6 +38,8 @@ public class RobotContainer {
   public HardwareObjects hardware;
   public Network network;
 
+  double log;
+
   /**
    * RobotContainer Constructor.
    */
@@ -46,7 +48,7 @@ public class RobotContainer {
     this.ai = new AI();
     this.command_handler = new CommandHandler();
     this.main_command = new Command(0, 0);
-    SYNC_TIME = (double) main_timer.getTimeInMillis() / 1000;
+    this.SYNC_TIME = (double) main_timer.getTimeInMillis() / 1000;
     this.drive_encoder_sensor = new DriveEncoderSensor(SYNC_TIME);
     this.imu_sensor = new IMUSensor(SYNC_TIME);
     this.hardware = new HardwareObjects();
@@ -66,7 +68,7 @@ public class RobotContainer {
     this.imu_sensor.reset(this.hardware);
     this.main_command = new Command(0, 0);
     this.main_state = new MainState();
-    this.network.init();
+    this.network.init(SYNC_TIME);
   }
 
   /**
@@ -87,8 +89,10 @@ public class RobotContainer {
 
     this.main_state.predict(Constants.MAIN_DT);
 
-    // Logging
-    this.network.writeNTable();
+    this.network.writeNTable(this.main_state);
+
+    this.log = this.network.stereo_net.getHeadingVal();
+
   }
 
   /**
