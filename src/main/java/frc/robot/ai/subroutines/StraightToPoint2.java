@@ -145,13 +145,13 @@ public class StraightToPoint2 {
      * Checks whether an acceleration/deceleration to and from max velocity will 
      * within the planned distance
      * 
-     * @param init_vel
-     * @param distance
+     * @param init_vel current velocity of the robot
+     * @param distance proposed distanced to travel
      * @return
      */
     boolean maxVelocityCheck(double init_vel, double distance) {
-        double max_vel = Integer.MAX_VALUE; // TEMP
-        double max_accel = 420.69; // TEMP
+        double max_vel = (2.0 * Math.PI * Constants.WHEEL_RADIUS) * (Constants.MOTOR_MAX_RPM / 60.0);
+        double max_accel = (Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
         double max_decel = -max_accel;
         
         // Trapezoid area
