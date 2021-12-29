@@ -4,11 +4,11 @@ import frc.robot.state.MainState;
 import frc.robot.helper.SimpleMat;
 
 public class LimeTarget {
-    public double pos[] = { 0, 0 };
+    public double pos[]    = { 0, 0 };
     public double arange[] = { 0, 6.28 };
-    double x_fov = 0.6109;
+    double x_fov           = 0.6109;
 
-    public LimeTarget(double x_pos, double y_pos, double theta_0, double theta_1) {
+    public LimeTarget(double x_pos, double y_pos, double theta_0, double theta_1, double height) {
         this.pos[0] = x_pos;
         this.pos[1] = y_pos;
 
