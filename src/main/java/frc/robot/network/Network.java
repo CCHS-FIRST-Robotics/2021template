@@ -43,7 +43,6 @@ public class Network {
 
         stereo_net.init(inst);
     }
-
     public void writeNTable(MainState state) {
         this.emit_time.setDouble((double) System.currentTimeMillis() / 1000);
 
