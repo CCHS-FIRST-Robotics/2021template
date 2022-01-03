@@ -42,8 +42,8 @@ public final class Constants {
     public static final double INIT_L_WHL_VEL = 0;
     public static final double INIT_R_WHL_VEL = 0;
 
-    public static final double INIT_L_WHL_TRAC = 0.95;
-    public static final double INIT_R_WHL_TRAC = 0.95;
+    public static final double INIT_L_WHL_TRAC = 0.999;
+    public static final double INIT_R_WHL_TRAC = 0.999;
 
     public static final double INIT_FRICTION = 0.2;
 
@@ -128,5 +128,8 @@ public final class Constants {
     public static final double[] TURN_TUNING = { 0.2, 0.1, 0.05 };
 
     public static final double[] FORWARD_TUNING = { 0.3, 0.05, 0.4 };
+
+    // Controller Tunings
+    public static final double C_BASE_GAIN = 0.1;
 
 }

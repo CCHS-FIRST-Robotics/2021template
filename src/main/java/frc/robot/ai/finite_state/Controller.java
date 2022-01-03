@@ -22,8 +22,8 @@ public class Controller {
     PID r_pid;
 
     public Controller() {
-        l_pid = new PID(0.1, 0.0001, 0.001);
-        r_pid = new PID(0.1, 0.0001, 0.001);
+        l_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
+        r_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
     }
 
     public Command getCommands(MainState state) {
@@ -34,14 +34,37 @@ public class Controller {
         // triggers do tank drive
         double lx_prop = xbox.getX(Hand.kLeft);
         double ly_prop = xbox.getY(Hand.kLeft);
+
         double rx_prop = xbox.getX(Hand.kRight);
         double ry_prop = xbox.getY(Hand.kRight);
+
         double l_trig = xbox.getTriggerAxis(Hand.kLeft);
         double r_trig = xbox.getTriggerAxis(Hand.kRight);
 
-        double l_target = (ly_prop * -1 + lx_prop * 0.2) + (ry_prop * -0.2 + rx_prop * 1) + l_trig;
-        double r_target = (ly_prop * -1 + lx_prop * -0.2) + (ry_prop * -0.2 + rx_prop * -1) + r_trig;
+        double l_bump_prop = 1;
+        double r_bump_prop = 1;
+        if (xbox.getBumper(Hand.kLeft)) {
+            l_bump_prop = -1;
+        }
+        if (xbox.getBumper(Hand.kRight)) {
+            r_bump_prop = -1;
+        }
 
+        double l_target = (ly_prop * -1 + lx_prop * 0.2) + (ry_prop * -0.2 + rx_prop * 1) + l_trig * l_bump_prop;
+        double r_target = (ly_prop * -1 + lx_prop * -0.2) + (ry_prop * -0.2 + rx_prop * -1) + r_trig * r_bump_prop;
+
+        double l_fac = Math.abs(l_target);
+        double r_fac = Math.abs(r_target);
+        if (l_fac > 1) {
+            l_pid.setGain(l_fac * Constants.C_BASE_GAIN);
+        } else {
+            l_pid.setGain(Constants.C_BASE_GAIN);
+        }
+        if (r_fac > 1) {
+            r_pid.setGain(r_fac * Constants.C_BASE_GAIN);
+        } else {
+            r_pid.setGain(Constants.C_BASE_GAIN);
+        }
         l_target = Math.min(1, Math.max(-1, l_target)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
         r_target = Math.min(1, Math.max(-1, r_target)) * Constants.MOTOR_MAX_RPM * 2 * Math.PI / 60;
 

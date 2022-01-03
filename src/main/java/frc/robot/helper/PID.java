@@ -16,6 +16,10 @@ public class PID {
         reset();
     }
 
+    public void setGain(double new_p) {
+        this.k_p = new_p;
+    }
+
     public void reset() {
         this.integral = 0;
         this.previous_time = (double) System.currentTimeMillis() / 1000;
