@@ -208,4 +208,8 @@ public class SimpleMat {
         double[] new_vec = { a[0] - b[0], a[1] - b[1] };
         return mag(new_vec);
     }
+
+    public static double unitClamp(double a) {
+        return Math.min(1, Math.max(-1, a));
+    }
 }
