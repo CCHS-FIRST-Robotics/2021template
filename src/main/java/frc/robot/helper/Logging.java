@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Used to keep track of general version of robot's code Update Version after
  * major changes to any part of code!
@@ -87,6 +89,7 @@ public class Logging {
         divider();
         for (int i = 0; i < names.length; i++) {
             System.out.println(names[i] + ": " + String.valueOf(values[i]));
+            SmartDashboard.putNumber(names[i], values[i]);
         }
         divider();
     }
