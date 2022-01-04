@@ -32,7 +32,7 @@ public class PID {
             dt = 0.0001;
         }
         double deriv = (delta - this.previous) / dt;
-        this.integral = this.integral + delta * dt;
+        this.integral = this.integral*0.999 + delta * dt;
 
         double response = k_p * delta + k_i * this.integral + k_d * deriv;
 

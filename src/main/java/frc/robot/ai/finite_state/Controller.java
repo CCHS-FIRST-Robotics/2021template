@@ -31,8 +31,8 @@ public class Controller {
     TurnToPoint turn_generator;
 
     public Controller() {
-        this.l_pid = new PID(Constants.C_BASE_GAIN, 0.0001, 0.001);
-        this.r_pid = new PID(Constants.C_BASE_GAIN, 0.0001, 0.001);
+        this.l_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.001);
+        this.r_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.001);
     }
 
     double controllerCurve(double input) {
@@ -42,7 +42,7 @@ public class Controller {
         } else {
             dir = -1;
         }
-        return dir * Math.pow(Math.abs(input), 3);
+        return dir * Math.pow(Math.abs(input), 1);
     }
 
     public Command getCommands(MainState state) {
@@ -69,8 +69,8 @@ public class Controller {
             r_bump_prop = -1;
         }
 
-        double l_target = (ly_prop * -1 + lx_prop * 0.2) + (ry_prop * -0.2 + rx_prop * 1) + l_trig * l_bump_prop;
-        double r_target = (ly_prop * -1 + lx_prop * -0.2) + (ry_prop * -0.2 + rx_prop * -1) + r_trig * r_bump_prop;
+        double l_target = (ly_prop * -1 + lx_prop * 0.5) + (ry_prop * -0.5 + rx_prop * 1) + l_trig * l_bump_prop;
+        double r_target = (ly_prop * -1 + lx_prop * -0.5) + (ry_prop * -0.5 + rx_prop * -1) + r_trig * r_bump_prop;
 
         double l_fac = Math.abs(l_target);
         double r_fac = Math.abs(r_target);

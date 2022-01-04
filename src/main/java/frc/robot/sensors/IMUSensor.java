@@ -139,12 +139,12 @@ public class IMUSensor extends BaseSensor {
         SmartDashboard.putNumber("r deg", ypr_deg[2]);
         // 16384 = 1g
 
-        double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
+        double r_pitch = ypr_deg[2] * 2 * Math.PI / 360;
 
-        double x_acc = (double) xyz_acc[0] * -9.81 / 16384;
+        double x_acc = (double) xyz_acc[1] * -9.81 / 16384;
         x_acc = x_acc - x_acc_zero;
 
-        double yt_acc = (double) xyz_acc[1] * -9.81 / 16384;
+        double yt_acc = (double) xyz_acc[0] * -9.81 / 16384;
         double zt_acc = (double) xyz_acc[2] * -9.81 / 16384;
         double y_acc = yt_acc * Math.cos(r_pitch) + zt_acc * Math.sin(r_pitch);
 

@@ -7,6 +7,9 @@ import frc.robot.HardwareObjects;
 import frc.robot.helper.SimpleMat;
 
 import com.ctre.phoenix.motorcontrol.can.*;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.lang.Math;
 import frc.robot.HardwareObjects;
 
@@ -142,6 +145,7 @@ public class DriveEncoderSensor extends BaseSensor {
         double h_ang_var = Constants.VAR_RAD_VAR * diff_coeff / Constants.ROBOT_WIDTH;
 
         // Pos
+        SmartDashboard.putNumber("Odo Pos Var", p_var);
         double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var*0.1);
         double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var*0.1);
         double[] kpos = { pred_pos[0]*0.9 + state.getPosVal()[0]*0.1, pred_pos[1]*0.9 + state.getPosVal()[1]*0.1 };
