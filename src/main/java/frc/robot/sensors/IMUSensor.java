@@ -2,6 +2,7 @@ package frc.robot.sensors;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.HardwareObjects;
 import frc.robot.state.MainState;
@@ -124,6 +125,18 @@ public class IMUSensor extends BaseSensor {
         hardware.IMU.getBiasedAccelerometer(xyz_acc);
 
         hardware.IMU.getYawPitchRoll(ypr_deg);
+
+        SmartDashboard.putNumber("x dps", xyz_dps[0]);
+        SmartDashboard.putNumber("y dps", xyz_dps[1]);
+        SmartDashboard.putNumber("z dps", xyz_dps[2]);
+
+        SmartDashboard.putNumber("x acc", xyz_acc[0]);
+        SmartDashboard.putNumber("y acc", xyz_acc[1]);
+        SmartDashboard.putNumber("z acc", xyz_acc[2]);
+
+        SmartDashboard.putNumber("y deg", ypr_deg[0]);
+        SmartDashboard.putNumber("p deg", ypr_deg[1]);
+        SmartDashboard.putNumber("r deg", ypr_deg[2]);
         // 16384 = 1g
 
         double r_pitch = ypr_deg[1] * 2 * Math.PI / 360;
