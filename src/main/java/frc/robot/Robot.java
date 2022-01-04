@@ -37,12 +37,13 @@ public class Robot extends TimedRobot {
     double[] accv = rContainer.imu_sensor.log_acc;
     String[] name = { "IMU Fused Heading", "Yaw Rate", "Pitch", "Acceleration 0", "Acceleration 1", "L Encoder Radss",
         "R Encoder Radss", "Predicted Heading", "Wheel Odo Heading", "Wheel Odo Heading (k)", "Predicted X Pos",
-        "Predicted Y Pos", "Stereo H Val" };
+        "Predicted Y Pos", "Pos Var", "Stereo H Val" };
     double[] value = { rContainer.imu_sensor.log_fused_heading, rContainer.imu_sensor.log_yaw_vel,
         rContainer.imu_sensor.log_pitch, accv[0], accv[1], rContainer.drive_encoder_sensor.log_l_radss,
         rContainer.drive_encoder_sensor.log_r_radss, rContainer.main_state.getHeadingVal(),
         rContainer.drive_encoder_sensor.log_h_pred, rContainer.drive_encoder_sensor.log_hk_pred,
-        rContainer.main_state.getPosVal()[0], rContainer.main_state.getPosVal()[1], rContainer.log };
+        rContainer.main_state.getPosVal()[0], rContainer.main_state.getPosVal()[1], rContainer.main_state.getPosVar(),
+        rContainer.log };
     log.printInfo(name, value);
     System.out.println("Current State : " + rContainer.ai.getFiniteState());
 

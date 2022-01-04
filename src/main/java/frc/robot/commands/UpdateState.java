@@ -40,11 +40,6 @@ public class UpdateState {
 
         double ave_prop_coeff = (Math.abs(command.left_pwr_prop) + Math.abs(command.right_pwr_prop)) * 0.5;
         state.setAngAcc(ang_acc, Constants.ANG_VEL_VARIANCE * ave_prop_coeff);
-        double[] x_acc = state.kalmanUpdate(state.getAccVal()[0], state.getAccVar(), acc[0],
-                Constants.ACC_VARIANCE * ave_prop_coeff);
-        double[] y_acc = state.kalmanUpdate(state.getAccVal()[1], state.getAccVar(), acc[1],
-                Constants.ACC_VARIANCE * ave_prop_coeff);
-        double[] fused_acc = { x_acc[0], y_acc[0] };
-        state.setAcc(fused_acc, x_acc[1]);
+        state.setAcc(acc, Constants.ACC_VARIANCE * ave_prop_coeff);
     }
 }
