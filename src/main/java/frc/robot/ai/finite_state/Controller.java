@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants;
 import frc.robot.state.MainState;
+import frc.robot.ai.subroutines.*;
 import frc.robot.helper.*;
 import java.lang.Math;
 
@@ -21,9 +22,27 @@ public class Controller {
     PID l_pid;
     PID r_pid;
 
+    boolean dpad_pressed = false;
+    // Clockwise from top, 0: None, 1: Forward 0.1m ,2: Right 10 degrees, 3: Back
+    // 0.1m, 3: Left 10 degrees
+    int dpad_pos = 0;
+
+    StraightToPoint2 cmd_generator;
+    TurnToPoint turn_generator;
+
     public Controller() {
-        l_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
-        r_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
+        this.l_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
+        this.r_pid = new PID(Constants.C_BASE_GAIN, 0.0, 0.001);
+    }
+
+    double controllerCurve(double input) {
+        double dir = 1;
+        if (input > 0) {
+            dir = 1;
+        } else {
+            dir = -1;
+        }
+        return dir * Math.pow(Math.abs(input), 3);
     }
 
     public Command getCommands(MainState state) {
@@ -32,14 +51,14 @@ public class Controller {
         // direction
         // right stick is less sensitive in y direction
         // triggers do tank drive
-        double lx_prop = xbox.getX(Hand.kLeft);
-        double ly_prop = xbox.getY(Hand.kLeft);
+        double lx_prop = controllerCurve(xbox.getX(Hand.kLeft));
+        double ly_prop = controllerCurve(xbox.getY(Hand.kLeft));
 
-        double rx_prop = xbox.getX(Hand.kRight);
-        double ry_prop = xbox.getY(Hand.kRight);
+        double rx_prop = controllerCurve(xbox.getX(Hand.kRight));
+        double ry_prop = controllerCurve(xbox.getY(Hand.kRight));
 
-        double l_trig = xbox.getTriggerAxis(Hand.kLeft);
-        double r_trig = xbox.getTriggerAxis(Hand.kRight);
+        double l_trig = controllerCurve(xbox.getTriggerAxis(Hand.kLeft));
+        double r_trig = controllerCurve(xbox.getTriggerAxis(Hand.kRight));
 
         double l_bump_prop = 1;
         double r_bump_prop = 1;
