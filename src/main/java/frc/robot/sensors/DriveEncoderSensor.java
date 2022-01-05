@@ -126,49 +126,69 @@ public class DriveEncoderSensor extends BaseSensor {
         double[] o_delta = { 0, 0 };
         o_delta = SimpleMat.rot2d(this.o_local_delta, this.heading);
 
-        double[] pred_pos = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
+        double[] pred_pos_m = { this.pos[0] + o_delta[0], this.pos[1] + o_delta[1] };
 
-        double new_heading = this.heading + this.arc_angle;
+        double new_heading_m = this.heading + this.arc_angle;
+
+        double[] pred_pos_o = SimpleMat.add(state.getWhlOdoPosVal(), o_delta);
+        double new_heading_o = state.getWhlOdoHVal() + this.arc_angle;
 
         // compute variances
         double dist_coeff = (Math.abs(l_radss) + Math.abs(r_radss)) * Constants.MAIN_DT / (2 * Math.PI);
-        double p_var = this.pos_var
-                + Constants.VAR_RAD_VAR * dist_coeff * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
 
-        double v_var = Constants.VAR_RAD_VAR * dist_coeff * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC
-                / Constants.MAIN_DT;
-
+        double p_var = Constants.VAR_RAD_VAR * dist_coeff * Constants.WHEEL_RADIUS * Constants.INIT_L_WHL_TRAC;
         double diff_coeff = (Math.abs(l_radss - r_radss)) * Constants.MAIN_DT / (2 * Math.PI);
-        double h_var = this.heading_var
-                + Constants.VAR_RAD_VAR * 4 * diff_coeff * Constants.MAIN_DT / Constants.ROBOT_WIDTH;
+        double h_var = Constants.VAR_RAD_VAR * 4 * diff_coeff * Constants.MAIN_DT / Constants.ROBOT_WIDTH;
 
-        double h_ang_var = Constants.VAR_RAD_VAR * diff_coeff / Constants.ROBOT_WIDTH;
+        // Kalman update first with m
 
         // Pos
         SmartDashboard.putNumber("Odo Pos Var", p_var);
-        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos[0], p_var*0.1);
-        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos[1], p_var*0.1);
-        double[] kpos = { pred_pos[0]*0.9 + state.getPosVal()[0]*0.1, pred_pos[1]*0.9 + state.getPosVal()[1]*0.1 };
-        state.setPos(kpos, state.getPosVar()); // potential to set pred pos
+        SmartDashboard.putNumber("Odo Pos Accum Var", state.getWhlOdoPosVar());
+        SmartDashboard.putNumber("Current Pos Var", state.getPosVar());
+        double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos_m[0],
+                this.pos_var + p_var);
+        double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos_m[1],
+                this.pos_var + p_var);
+        double[] kpos = { xpos[0], ypos[0] };
+        state.setPos(kpos, xpos[1]); // potential to set pred pos
 
         // Vel
         double[] xvel = state.kalmanUpdate(state.getVelVal()[0], state.getVelVar(), o_delta[0] / Constants.MAIN_DT,
-                v_var);
+                p_var / Constants.MAIN_DT);
         double[] yvel = state.kalmanUpdate(state.getVelVal()[1], state.getVelVar(), o_delta[1] / Constants.MAIN_DT,
-                v_var);
+                p_var / Constants.MAIN_DT);
         double[] kvel = { xvel[0], yvel[0] };
         state.setVel(kvel, xvel[1]);
 
         // Heading
-        double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading, h_var);
-        this.log_h_pred = new_heading;
+        double[] kheading = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading_m,
+                this.heading_var + h_var);
+        this.log_h_pred = new_heading_o;
         this.log_hk_pred = kheading[0];
         state.setHeading(kheading[0], kheading[1]);
 
         // Ang Vel
         double[] kangvel = state.kalmanUpdate(state.getAngVelVal(), state.getAngVelVar(),
-                this.arc_angle / Constants.MAIN_DT, h_ang_var);
+                this.arc_angle / Constants.MAIN_DT, h_var / Constants.MAIN_DT);
         state.setAngVel(kangvel[0], kangvel[1]);
+
+        // Kalman Update with O
+
+        // pos
+        double[] xpos_o = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos_o[0],
+                state.getWhlOdoPosVar() + p_var);
+        double[] ypos_o = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos_o[1],
+                state.getWhlOdoPosVar() + p_var);
+        double[] kpos_o = { xpos_o[0], ypos_o[0] };
+        state.setPos(kpos_o, xpos_o[1]); // potential to set pred pos
+        // Heading
+        double[] kheading_o = state.kalmanAngleUpdate(state.getHeadingVal(), state.getHeadingVar(), new_heading_o,
+                state.getWhlOdoHVar() + h_var);
+        state.setHeading(kheading_o[0], kheading_o[1]);
+
+        state.setWhlOdoPos(pred_pos_o, state.getWhlOdoPosVar() + p_var);
+        state.setWhlOdoH(new_heading_o, state.getWhlOdoHVar() + h_var);
 
         this.pos = state.getPosVal();
         this.heading = state.getHeadingVal();

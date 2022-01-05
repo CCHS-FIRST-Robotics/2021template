@@ -11,6 +11,7 @@ import java.lang.*;
 public class MainState {
     Kinematics Phy = new Kinematics();
     Wheel Whl = new Wheel();
+    WheelOdo WhlOdo = new WheelOdo();
 
     /**
      * predict all subclass states for dt time in the future.
@@ -190,5 +191,31 @@ public class MainState {
     public void setRWhlRadss(double val, double var) {
         this.Whl.Val.right_wheel_radss = val;
         this.Whl.Var.right_wheel_radss = var;
+    }
+
+    public double[] getWhlOdoPosVal() {
+        return this.WhlOdo.Val.pos;
+    }
+
+    public double getWhlOdoPosVar() {
+        return this.WhlOdo.Var.whl_odo_pos_var;
+    }
+
+    public void setWhlOdoPos(double[] val, double var) {
+        this.WhlOdo.Val.pos = val;
+        this.WhlOdo.Var.whl_odo_pos_var = var;
+    }
+
+    public double getWhlOdoHVal() {
+        return this.WhlOdo.Val.heading;
+    }
+
+    public double getWhlOdoHVar() {
+        return this.WhlOdo.Var.heading_var;
+    }
+
+    public void setWhlOdoH(double val, double var) {
+        this.WhlOdo.Val.heading = val;
+        this.WhlOdo.Var.heading_var = var;
     }
 }
