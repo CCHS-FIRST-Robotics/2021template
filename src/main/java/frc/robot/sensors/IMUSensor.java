@@ -141,7 +141,7 @@ public class IMUSensor extends BaseSensor {
 
         double r_pitch = ypr_deg[2] * 2 * Math.PI / 360;
 
-        double x_acc = (double) xyz_acc[1] * -9.81 / 16384;
+        double x_acc = (double) xyz_acc[1] * 9.81 / 16384;
         x_acc = x_acc - x_acc_zero;
 
         double yt_acc = (double) xyz_acc[0] * -9.81 / 16384;
