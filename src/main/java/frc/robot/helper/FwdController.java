@@ -5,8 +5,9 @@ import frc.robot.Constants;
 import frc.robot.state.MainState;
 
 public class FwdController {
-    double v_max = 0.5 * Constants.MOTOR_MAX_RPM * 2 * Math.PI * Constants.WHEEL_RADIUS / 60;
-    double a_max = 0.5 * (2 * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
+    double v_max = 1 * Constants.MOTOR_MAX_RPM * 2 * Math.PI * Constants.WHEEL_RADIUS / 60;
+    double a_max = 0.8 * (2 * Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
+    //double a_max = 5;
     double jerk = 3;
 
     double target_v = 0;
@@ -41,7 +42,7 @@ public class FwdController {
             a = a - fx / fxp;
             deriv = a - prev;
             prev = a;
-            if (i > 7 && deriv > 0.2) {
+            if (i > 7 && deriv > 0.05) {
                 return lsd;
             }
         }
@@ -59,6 +60,8 @@ public class FwdController {
             dt = 0.0001;
         }
         double current_v = (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5) * Constants.WHEEL_RADIUS;
+        SmartDashboard.putNumber("Current Velocity", current_v);
+        
         double dir;
         if (x > 0) {
             dir = 1;
@@ -68,7 +71,8 @@ public class FwdController {
         double acc = getAcc(x * dir, current_v * dir) * dir;
         double radpss = acc / Constants.WHEEL_RADIUS;
         target_v = target_v + radpss * dt;
-        target_v = Math.min(this.v_max, Math.max(-1 * this.v_max, target_v));
+        target_v = Math.min(this.v_max / Constants.WHEEL_RADIUS, Math.max(-1 * this.v_max / Constants.WHEEL_RADIUS, target_v));
+        SmartDashboard.putNumber("radpss", radpss);
         SmartDashboard.putNumber("C Target Radss", target_v);
         double delta = target_v - (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5);
         double resp = this.whl_c.update(delta);

@@ -146,6 +146,8 @@ public class DriveEncoderSensor extends BaseSensor {
         SmartDashboard.putNumber("Odo Pos Var", p_var);
         SmartDashboard.putNumber("Odo Pos Accum Var", state.getWhlOdoPosVar());
         SmartDashboard.putNumber("Current Pos Var", state.getPosVar());
+        SmartDashboard.putNumber("Odo X Pos", state.getPosVal()[0]);
+        SmartDashboard.putNumber("Odo Y Pos", state.getPosVal()[1]);
         double[] xpos = state.kalmanUpdate(state.getPosVal()[0], state.getPosVar(), pred_pos_m[0],
                 this.pos_var + p_var);
         double[] ypos = state.kalmanUpdate(state.getPosVal()[1], state.getPosVar(), pred_pos_m[1],

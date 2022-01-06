@@ -125,7 +125,7 @@ public final class Constants {
     // Standard PID Tunings
     public static final double[] DRIVE_WHL_TUNING = { 0.1, 0.1, 0.1 };
 
-    public static final double[] TURN_TUNING = { 0.2, 0.1, 0.05 };
+    public static final double[] TURN_TUNING = { 0.2, 0.05, 0.05 };
 
     public static final double[] FORWARD_TUNING = { 0.3, 0.05, 0.4 };
 

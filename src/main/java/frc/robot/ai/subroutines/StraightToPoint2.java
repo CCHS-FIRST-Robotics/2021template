@@ -197,11 +197,12 @@ public class StraightToPoint2 {
             prop_command[1] = prop_command[1] * -1;
         }
         // double pwr = Math.max(Math.min(pwrController(main_state, arc_dist), 1), -1);
+        SmartDashboard.putNumber("x dist", arc_dist);
         double pwr = Math.max(Math.min(this.forward_pid.update(arc_dist), 1), -1);
         double c_pwr = c_cont.update(main_state, arc_dist);
         SmartDashboard.putNumber("f pwr", pwr);
         SmartDashboard.putNumber("fc pwr", c_pwr);
-        double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
+        double[] t_cmd = SimpleMat.scaleVec(prop_command, c_pwr / (max_prop_mag + 0.0001));
 
         Command output = new Command(t_cmd[0], t_cmd[1]);
 

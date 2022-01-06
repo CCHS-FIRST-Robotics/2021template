@@ -31,8 +31,8 @@ public class Controller {
     TurnToPoint turn_generator;
 
     public Controller() {
-        this.l_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.001);
-        this.r_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.001);
+        this.l_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.00);
+        this.r_pid = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN*0.1, Constants.C_BASE_GAIN*0.00);
     }
 
     double controllerCurve(double input) {
