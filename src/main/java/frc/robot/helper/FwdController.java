@@ -10,11 +10,14 @@ public class FwdController {
 
     double target_v = 0;
 
+    double previous_time;
+
     PID whl_c;
 
     public FwdController() {
         this.target_v = 0;
         this.whl_c = new PID(Constants.C_BASE_GAIN, Constants.C_BASE_GAIN * 0.1, Constants.C_BASE_GAIN * 0.001);
+        reset();
     }
 
     double getAcc(double clean_x, double clean_v) {
@@ -44,7 +47,16 @@ public class FwdController {
         return a;
     }
 
+    public void reset() {
+        this.previous_time = (double) System.currentTimeMillis() / 1000;
+    }
+
     public double update(MainState state, double x) {
+        double current_time = (double) System.currentTimeMillis() / 1000;
+        double dt = current_time - this.previous_time;
+        if (dt == 0) {
+            dt = 0.0001;
+        }
         double current_v = (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5) * Constants.WHEEL_RADIUS;
         double dir;
         if (x > 0) {
@@ -54,7 +66,7 @@ public class FwdController {
         }
         double acc = getAcc(x * dir, current_v * dir) * dir;
         double radpss = acc / Constants.WHEEL_RADIUS;
-        target_v = target_v + radpss * Constants.MAIN_DT;
+        target_v = target_v + radpss * dt;
         target_v = Math.min(this.v_max, Math.max(-1 * this.v_max, target_v));
         double delta = target_v - (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5);
         double resp = this.whl_c.update(delta);
