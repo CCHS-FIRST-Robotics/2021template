@@ -55,6 +55,7 @@ public class FwdController {
         double acc = getAcc(x * dir, current_v * dir) * dir;
         double radpss = acc / Constants.WHEEL_RADIUS;
         target_v = target_v + radpss * Constants.MAIN_DT;
+        target_v = Math.min(this.v_max, Math.max(-1 * this.v_max, target_v));
         double delta = target_v - (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5);
         double resp = this.whl_c.update(delta);
         resp = Math.min(1, Math.max(-1, resp));
