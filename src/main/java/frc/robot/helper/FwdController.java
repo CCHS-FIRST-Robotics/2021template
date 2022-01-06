@@ -1,5 +1,6 @@
 package frc.robot.helper;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.state.MainState;
 
@@ -26,7 +27,7 @@ public class FwdController {
             return this.a_max;
         }
         // Compute lin straight down
-        double lsd = Math.pow(clean_v, 2) / (2 * clean_x);
+        double lsd = -1 * Math.pow(clean_v, 2) / (2 * clean_x);
         // Newtons method with convergence check
         double prev = a_max;
         double deriv = 0;
@@ -68,6 +69,7 @@ public class FwdController {
         double radpss = acc / Constants.WHEEL_RADIUS;
         target_v = target_v + radpss * dt;
         target_v = Math.min(this.v_max, Math.max(-1 * this.v_max, target_v));
+        SmartDashboard.putNumber("C Target Radss", target_v);
         double delta = target_v - (state.getLWhlRadssVal() * 0.5 + state.getRWhlRadssVal() * 0.5);
         double resp = this.whl_c.update(delta);
         resp = Math.min(1, Math.max(-1, resp));
