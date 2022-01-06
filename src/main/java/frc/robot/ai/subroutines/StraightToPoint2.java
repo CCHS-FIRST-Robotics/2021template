@@ -4,6 +4,8 @@ import frc.robot.commands.Command;
 import frc.robot.state.MainState;
 import frc.robot.helper.PID;
 import frc.robot.helper.SimpleMat;
+import frc.robot.helper.FwdController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.ai.subroutines.exit_methods.ExitMethods;
 
@@ -16,6 +18,7 @@ import frc.robot.ai.subroutines.exit_methods.ExitMethods;
  */
 public class StraightToPoint2 {
     PID forward_pid;
+    FwdController c_cont;
     double[] target = { 0, 0 };
     double start_time_sec;
     double end_time;
@@ -38,6 +41,7 @@ public class StraightToPoint2 {
         this.target[0] = target_x;
         this.target[1] = target_y;
         this.previous_pwr = 0;
+        c_cont = new FwdController();
     }
 
     /**
@@ -140,9 +144,9 @@ public class StraightToPoint2 {
         double output = Math.min(prop_comp + Constants.MIN_R_FAC, 1);
         return output;
     }
-    
+
     /**
-     * Checks whether an acceleration/deceleration to and from max velocity will 
+     * Checks whether an acceleration/deceleration to and from max velocity will
      * within the planned distance
      * 
      * @param init_vel current velocity of the robot
@@ -153,9 +157,9 @@ public class StraightToPoint2 {
         double max_vel = (2.0 * Math.PI * Constants.WHEEL_RADIUS) * (Constants.MOTOR_MAX_RPM / 60.0);
         double max_accel = (Constants.MOTOR_MAX_TORQUE / Constants.WHEEL_RADIUS) / Constants.ROBOT_MASS;
         double max_decel = -max_accel;
-        
+
         // Trapezoid area
-        double max_accel_diff = max_vel - init_vel; 
+        double max_accel_diff = max_vel - init_vel;
         double accel_time = Math.sqrt((max_accel * max_accel) - (max_accel_diff * max_accel_diff));
         double accel_dist = ((init_vel + max_vel) / 2) * accel_time;
 
@@ -194,6 +198,9 @@ public class StraightToPoint2 {
         }
         // double pwr = Math.max(Math.min(pwrController(main_state, arc_dist), 1), -1);
         double pwr = Math.max(Math.min(this.forward_pid.update(arc_dist), 1), -1);
+        double c_pwr = c_cont.update(main_state, arc_dist);
+        SmartDashboard.putNumber("f pwr", pwr);
+        SmartDashboard.putNumber("fc pwr", c_pwr);
         double[] t_cmd = SimpleMat.scaleVec(prop_command, pwr / (max_prop_mag + 0.0001));
 
         Command output = new Command(t_cmd[0], t_cmd[1]);

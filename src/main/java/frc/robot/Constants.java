@@ -68,9 +68,9 @@ public final class Constants {
     // ==================
     // IMU VARIANCE
     // ==================
-    public static final double BASE_HEADING_VAR = 0.2 * 0.2;
+    public static final double BASE_HEADING_VAR = 0.1 * 0.1;
     public static final double DELTA_VAR = 0.0001;
-    public static final double MAX_HEADING_VAR = 0.3 * 0.3;
+    public static final double MAX_HEADING_VAR = 0.2 * 0.2;
 
     public static final double IMU_ACC_VAR = 4;
     // ==================
